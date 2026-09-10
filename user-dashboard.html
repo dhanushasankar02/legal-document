@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en" class="light" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JurisDraft - User Dashboard & Legal Vault</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <link rel="alternate icon" href="favicon.svg">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              800: '#102a43',
+              900: '#061727',
+              950: '#030c17',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- EMBEDDED CSS STYLES WITH MOBILE RESET -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+    *, ::before, ::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    img, svg, video, canvas, iframe {
+      max-width: 100%;
+      height: auto;
+    }
+
+    p, h1, h2, h3, h4, h5, h6, span, a, label, button, input, textarea, select {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    h1, h2, h3, .font-serif {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    /* Custom Scrollbar for Dashboard Main Area */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.05);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: rgba(51, 65, 85, 0.6);
+    }
+
+    /* RTL Layout Support */
+    [dir="rtl"] {
+      text-align: right;
+    }
+
+    /* Smooth Scroll */
+    html, main {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 h-screen antialiased flex overflow-hidden">
+
+  <!-- ========================================================= -->
+  <!-- SIDEBAR NAVIGATION (NO MARKETING NAVBAR / NO FOOTER)      -->
+  <!-- ========================================================= -->
+  <div id="userSidebarBackdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 md:hidden hidden transition-opacity"></div>
+  <aside id="appSidebar" class="w-64 h-screen bg-slate-900 text-slate-300 flex-shrink-0 flex-col justify-between border-r border-slate-800 hidden md:flex fixed md:relative top-0 left-0 bottom-0 z-50 transition-all duration-300">
+    
+    <div>
+      <!-- Sidebar Brand Header -->
+      <div class="h-16 px-6 flex items-center gap-3 border-b border-slate-800 cursor-pointer" onclick="window.location.href='index.html'">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 text-amber-400 flex items-center justify-center font-bold text-base shadow-sm">
+          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18"/>
+          </svg>
+        </div>
+        <div>
+          <span class="text-lg font-bold font-serif text-white tracking-wide">JurisDraft</span>
+          <span class="block text-[10px] text-amber-400 uppercase tracking-widest font-mono font-semibold">User Vault Desk</span>
+        </div>
+      </div>
+
+      <!-- App Menu Links -->
+      <div class="px-3 py-6 space-y-1 text-xs font-medium">
+        <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Main Menu</p>
+
+        <a href="#sec-user-overview" id="nav-sec-user-overview" onclick="showPage(event, 'sec-user-overview')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-blue-600 text-white font-bold transition shadow-md">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+            <span>Dashboard Overview</span>
+          </div>
+        </a>
+
+        <a href="#sec-user-docs" id="nav-sec-user-docs" onclick="showPage(event, 'sec-user-docs')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>My Documents</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-slate-800 text-amber-400 font-bold text-[10px]">12</span>
+        </a>
+
+        <a href="#sec-user-generator" id="nav-sec-user-generator" onclick="showPage(event, 'sec-user-generator')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>Smart Draft Generator</span>
+          </div>
+        </a>
+
+        <a href="#sec-user-attorney" id="nav-sec-user-attorney" onclick="showPage(event, 'sec-user-attorney')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span>Attorney Reviews</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-blue-950 text-blue-400 font-bold text-[10px]">1 Active</span>
+        </a>
+
+        <a href="#sec-user-vault" id="nav-sec-user-vault" onclick="showPage(event, 'sec-user-vault')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span>Vault Key Delegation</span>
+          </div>
+        </a>
+
+        <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider pt-4 mb-2">Account &amp; Services</p>
+
+        <a href="#sec-user-billing" id="nav-sec-user-billing" onclick="showPage(event, 'sec-user-billing')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            <span>Billing &amp; Tokens</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-purple-950 text-purple-300 font-bold text-[10px]">2 Tokens</span>
+        </a>
+
+        <a href="#sec-user-settings" id="nav-sec-user-settings" onclick="showPage(event, 'sec-user-settings')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <div class="flex items-center gap-3">
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span>Security Controls</span>
+          </div>
+        </a>
+
+        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white transition">
+          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span>Back to Main Website</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Sidebar Bottom User Card -->
+    <div class="p-4 border-t border-slate-800">
+      <div class="bg-slate-800/80 p-3 rounded-2xl flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-amber-400 text-slate-950 font-bold flex items-center justify-center text-xs">
+            SJ
+          </div>
+          <div>
+            <p class="font-bold text-xs text-white">Sarah Jenkins</p>
+            <p class="text-[10px] text-amber-400">Pro Member</p>
+          </div>
+        </div>
+        <button onclick="window.location.href='index.html'" title="Exit Dashboard" class="p-1.5 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </aside>
+
+
+  <!-- ========================================================= -->
+  <!-- MAIN APPLICATION CONTENT AREA                             -->
+  <!-- ========================================================= -->
+  <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+    
+    <!-- APP HEADER BAR -->
+    <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 sm:px-8 flex-shrink-0 z-30">
+      
+      <div class="flex items-center gap-3">
+        <!-- Mobile Sidebar Toggle Button -->
+        <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+
+        <!-- Search Bar -->
+        <div class="relative w-48 sm:w-80">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" id="globalSearch" onkeyup="handleGlobalSearch(event)" placeholder="Search documents, vault keys, notes..." class="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+      </div>
+
+      <!-- App Header Actions -->
+      <div class="flex items-center gap-3">
+        
+        <!-- Live Desk Indicator -->
+        <div class="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300 text-xs font-bold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Vault Desk Active</span>
+        </div>
+
+        <!-- 🔔 Notification Bell -->
+        <button onclick="alert('You have 1 pending attorney note from Attorney Michael Vance.')" class="relative p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-500"></span>
+        </button>
+
+        <!-- 🌙 Dark Mode Toggle -->
+        <button id="theme-toggle" title="Toggle Dark Mode" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium border border-slate-200 dark:border-slate-700">
+          <span id="theme-toggle-icon">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          </span>
+        </button>
+
+        <!-- ↔️ RTL / LTR Toggle -->
+        <button id="rtl-toggle" title="Toggle RTL / LTR" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium border border-slate-200 dark:border-slate-700">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 3 4 7l4 4M4 7h16M16 21l4-4-4-4M20 17H4"/></svg>
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <!-- SCROLLABLE DASHBOARD CONTENT BODY -->
+    <main id="mainContentArea" class="flex-1 overflow-y-auto p-4 sm:p-8 space-y-8">
+      
+      <!-- ========================================================= -->
+      <!-- SECTION 1: DASHBOARD OVERVIEW & QUICK METRICS (#sec-user-overview) -->
+      <!-- ========================================================= -->
+      <section id="sec-user-overview" class="dashboard-page space-y-6">
+        
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-blue-950 via-slate-900 to-slate-950 rounded-3xl p-6 sm:p-8 text-white border border-slate-800 shadow-xl relative overflow-hidden">
+          <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold uppercase tracking-wider mb-3">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>Pro Member &bull; Texas Jurisdiction Active</span>
+              </div>
+              <h1 class="font-serif text-2xl sm:text-4xl font-bold">Welcome Back, <span class="text-amber-400">Sarah Jenkins</span></h1>
+              <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-xl">
+                Your legal documents are encrypted with AES-256 zero-knowledge keys. You have 3 bar-certified documents and 2 notarization tokens ready.
+              </p>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+              <a href="#sec-user-generator" onclick="showPage(event, 'sec-user-generator')" class="px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shadow-lg flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                <span>Draft New Document</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 KPI Stat Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer hover:border-blue-500 transition" onclick="showPage(null, 'sec-user-docs')">
+            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-2">
+              <span>Saved Legal Drafts</span>
+              <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center">📜</div>
+            </div>
+            <p class="font-serif text-3xl font-bold text-slate-900 dark:text-white">12</p>
+            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-semibold">&uarr; 3 updated this month</p>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer hover:border-amber-500 transition" onclick="showPage(null, 'sec-user-attorney')">
+            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-2">
+              <span>Bar Certified Reviews</span>
+              <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center">⚖️</div>
+            </div>
+            <p class="font-serif text-3xl font-bold text-amber-600 dark:text-amber-400">3 Certified</p>
+            <p class="text-[11px] text-slate-500 mt-1 font-semibold">1 review pending approval</p>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer hover:border-emerald-500 transition" onclick="showPage(null, 'sec-user-vault')">
+            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-2">
+              <span>Vault Encryption</span>
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">🛡️</div>
+            </div>
+            <p class="font-serif text-3xl font-bold text-emerald-600 dark:text-emerald-400">256-Bit</p>
+            <p class="text-[11px] text-slate-500 mt-1 font-semibold">Zero-Knowledge Key Active</p>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer hover:border-purple-500 transition" onclick="showPage(null, 'sec-user-billing')">
+            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-2">
+              <span>Notary Tokens</span>
+              <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center">🎫</div>
+            </div>
+            <p class="font-serif text-3xl font-bold text-slate-900 dark:text-white">2 Left</p>
+            <p class="text-[11px] text-purple-600 dark:text-purple-400 mt-1 font-semibold">Renews Oct 1, 2026</p>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- SECTION 2: DOCUMENT MANAGEMENT TABLE (#sec-user-docs)     -->
+      <!-- ========================================================= -->
+      <section id="sec-user-docs" class="dashboard-page hidden bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Document Vault</span>
+            <h2 class="font-serif text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">My Saved Legal Documents</h2>
+          </div>
+
+          <!-- Category Filter Pills -->
+          <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-semibold overflow-x-auto max-w-full">
+            <button id="btn-filter-all" onclick="filterDocs('all')" class="px-3.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 text-blue-900 dark:text-blue-400 shadow-sm font-bold transition whitespace-nowrap flex-shrink-0">All Documents (12)</button>
+            <button id="btn-filter-estate" onclick="filterDocs('estate')" class="px-3.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap flex-shrink-0">Estate (5)</button>
+            <button id="btn-filter-business" onclick="filterDocs('business')" class="px-3.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap flex-shrink-0">Business (4)</button>
+            <button id="btn-filter-realestate" onclick="filterDocs('realestate')" class="px-3.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap flex-shrink-0">Real Estate (3)</button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 w-full">
+          <table class="w-full min-w-[750px] text-left text-xs text-slate-700 dark:text-slate-300">
+            <thead class="bg-slate-50 dark:bg-slate-800/80 uppercase font-bold text-[11px] text-slate-500 border-b border-slate-200 dark:border-slate-800">
+              <tr>
+                <th class="px-6 py-4 whitespace-nowrap min-w-[240px]">Document Title</th>
+                <th class="px-6 py-4 whitespace-nowrap">State Jurisdiction</th>
+                <th class="px-6 py-4 whitespace-nowrap">Last Modified</th>
+                <th class="px-6 py-4 whitespace-nowrap">Status &amp; Verification</th>
+                <th class="px-6 py-4 text-right whitespace-nowrap">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="docTableBody" class="divide-y divide-slate-200 dark:divide-slate-800">
+              
+              <!-- Doc 1 -->
+              <tr data-category="estate" class="doc-row hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <td class="px-6 py-4 font-bold text-slate-900 dark:text-white flex items-center gap-3 min-w-[240px]">
+                  <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400 flex items-center justify-center flex-shrink-0">📜</div>
+                  <div class="min-w-0">
+                    <p class="font-bold text-sm doc-name whitespace-nowrap">Last Will &amp; Testament</p>
+                    <p class="text-[11px] text-slate-500 font-normal whitespace-nowrap">Primary Estate Distribution &amp; Executor Designation</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4 font-medium whitespace-nowrap">Texas (TX)</td>
+                <td class="px-6 py-4 text-slate-500 whitespace-nowrap">Sept 6, 2026</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] inline-flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Bar Certified
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-right space-x-2 whitespace-nowrap">
+                  <button onclick="previewDoc('Last Will & Testament')" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950 font-bold transition">PDF Preview</button>
+                  <button onclick="alert('Viewing Attorney Comments for Last Will & Testament...')" class="px-3 py-1.5 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-bold hover:underline transition">Notes</button>
+                </td>
+              </tr>
+
+              <!-- Doc 2 -->
+              <tr data-category="estate" class="doc-row hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <td class="px-6 py-4 font-bold text-slate-900 dark:text-white flex items-center gap-3 min-w-[240px]">
+                  <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400 flex items-center justify-center flex-shrink-0">🏛️</div>
+                  <div class="min-w-0">
+                    <p class="font-bold text-sm doc-name whitespace-nowrap">Revocable Living Trust</p>
+                    <p class="text-[11px] text-slate-500 font-normal whitespace-nowrap">Jenkins Family Asset Vault &amp; Successor Trustee</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4 font-medium whitespace-nowrap">Texas (TX)</td>
+                <td class="px-6 py-4 text-slate-500 whitespace-nowrap">Sept 4, 2026</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-bold text-[10px] inline-flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span> Attorney Reviewing
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-right space-x-2 whitespace-nowrap">
+                  <button onclick="previewDoc('Revocable Living Trust')" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950 font-bold transition">Draft Preview</button>
+                </td>
+              </tr>
+
+              <!-- Doc 3 -->
+              <tr data-category="business" class="doc-row hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <td class="px-6 py-4 font-bold text-slate-900 dark:text-white flex items-center gap-3 min-w-[240px]">
+                  <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">💼</div>
+                  <div class="min-w-0">
+                    <p class="font-bold text-sm doc-name whitespace-nowrap">LLC Operating Agreement</p>
+                    <p class="text-[11px] text-slate-500 font-normal whitespace-nowrap">Apex Digital Legal Holdings LLC</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4 font-medium whitespace-nowrap">Delaware (DE)</td>
+                <td class="px-6 py-4 text-slate-500 whitespace-nowrap">Aug 28, 2026</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] inline-flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Completed
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-right space-x-2 whitespace-nowrap">
+                  <button onclick="previewDoc('LLC Operating Agreement')" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950 font-bold transition">PDF Preview</button>
+                </td>
+              </tr>
+
+              <!-- Doc 4 -->
+              <tr data-category="realestate" class="doc-row hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <td class="px-6 py-4 font-bold text-slate-900 dark:text-white flex items-center gap-3 min-w-[240px]">
+                  <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-400 flex items-center justify-center flex-shrink-0">🏠</div>
+                  <div class="min-w-0">
+                    <p class="font-bold text-sm doc-name whitespace-nowrap">Quitclaim Real Estate Deed</p>
+                    <p class="text-[11px] text-slate-500 font-normal whitespace-nowrap">Residential Property Transfer to Living Trust</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4 font-medium whitespace-nowrap">Texas (TX)</td>
+                <td class="px-6 py-4 text-slate-500 whitespace-nowrap">Aug 15, 2026</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold text-[10px] inline-flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Pending Notary
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-right space-x-2 whitespace-nowrap">
+                  <button onclick="alert('Initiating Remote Online Notarization (RON)...')" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold transition">Notarize Now</button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- SECTION 3: SMART DRAFT GENERATOR WIZARD (#sec-user-generator) -->
+      <!-- ========================================================= -->
+      <section id="sec-user-generator" class="dashboard-page hidden bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        
+        <div>
+          <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Guided Drafting Desk</span>
+          <h2 class="font-serif text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">Smart Document Generator</h2>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">Select your document type and state jurisdiction to compile statutory execution clauses instantly.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div>
+            <label class="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-2">1. Document Type</label>
+            <select id="genType" class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-xs focus:outline-none focus:border-amber-500">
+              <option value="Last Will & Testament">Last Will &amp; Testament</option>
+              <option value="Revocable Living Trust">Revocable Living Trust</option>
+              <option value="Durable Power of Attorney">Durable Power of Attorney</option>
+              <option value="Healthcare Medical Directive">Healthcare Medical Directive</option>
+              <option value="LLC Operating Agreement">LLC Operating Agreement</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-2">2. State Jurisdiction</label>
+            <select id="genState" class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-xs focus:outline-none focus:border-amber-500">
+              <option value="Texas">Texas (TX)</option>
+              <option value="California">California (CA)</option>
+              <option value="New York">New York (NY)</option>
+              <option value="Florida">Florida (FL)</option>
+              <option value="Delaware">Delaware (DE)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase text-slate-700 dark:text-slate-300 mb-2">3. Primary Beneficiary</label>
+            <input type="text" id="genBeneficiary" placeholder="e.g. Robert Jenkins (Spouse)" class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-xs focus:outline-none focus:border-amber-500">
+          </div>
+        </div>
+
+        <button onclick="runGeneratorConsole()" class="w-full py-3.5 bg-blue-900 hover:bg-blue-800 dark:bg-blue-600 text-white font-bold rounded-xl text-xs transition shadow-md flex items-center justify-center gap-2">
+          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>Generate Statutory Clauses &amp; Save Draft</span>
+        </button>
+
+        <div id="genConsole" class="hidden p-4 rounded-xl bg-slate-950 text-slate-200 font-mono text-xs space-y-1">
+          <p class="text-amber-400 font-bold">[GENERATOR OK] Compiling statutory clauses for Texas Probate Code § 251.104...</p>
+          <p id="genConsoleText" class="text-slate-300"></p>
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- SECTION 4: ATTORNEY REVIEWS & NOTES (#sec-user-attorney)  -->
+      <!-- ========================================================= -->
+      <section id="sec-user-attorney" class="dashboard-page hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <div class="lg:col-span-8 bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div>
+              <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Attorney Verification Desk</span>
+              <h3 class="font-serif text-xl font-bold text-slate-900 dark:text-white mt-1">Assigned Bar Attorney Notes</h3>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px]">Verified Certified</span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-blue-50 dark:bg-slate-800/80 border border-blue-200 dark:border-slate-700 space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-blue-900 text-amber-400 font-bold flex items-center justify-center text-xs">
+                MV
+              </div>
+              <div>
+                <p class="font-bold text-xs text-slate-900 dark:text-white">Michael Vance, Esq. (Texas Bar #240912)</p>
+                <p class="text-[11px] text-slate-500">Specialization: Estate Planning &amp; Probate Enforceability</p>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-700 dark:text-slate-300 leading-relaxed italic">
+              &ldquo;I have completed line-by-line verification of your Texas Last Will &amp; Testament. The self-proving affidavit clause complies with Tex. Est. Code § 251.104. Be sure to execute in the presence of two disinterested adult witnesses.&rdquo;
+            </p>
+
+            <div class="pt-2 flex items-center gap-3">
+              <button onclick="alert('Booking 1-on-1 Attorney Consultation Call...')" class="px-4 py-2 bg-blue-900 dark:bg-blue-600 hover:bg-blue-800 text-white font-bold text-xs rounded-xl transition">
+                Book 15-Min Attorney Call
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-4 bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Attorney Review Turnaround</span>
+            <h4 class="font-serif text-lg font-bold text-slate-900 dark:text-white mt-1">Submit Draft for Review</h4>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+              Included in your Pro Plan: Get your draft audited and certified by a state bar attorney within 24 hours.
+            </p>
+          </div>
+          <button onclick="alert('Draft submitted to Attorney Review Queue!')" class="mt-6 w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition shadow-md">
+            Submit New Draft for Bar Review
+          </button>
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- SECTION 5: SECURE VAULT KEY DELEGATION (#sec-user-vault)  -->
+      <!-- ========================================================= -->
+      <section id="sec-user-vault" class="dashboard-page hidden bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        
+        <div>
+          <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Access Control</span>
+          <h2 class="font-serif text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">Encrypted Vault &amp; Beneficiary Keys</h2>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">Manage zero-knowledge keys assigned to family members, trustees, or legal representatives.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 font-bold flex items-center justify-center text-xs">
+                RJ
+              </div>
+              <div>
+                <p class="font-bold text-xs text-slate-900 dark:text-white">Robert Jenkins (Spouse)</p>
+                <p class="text-[11px] text-slate-500">Executive Access &bull; Key #K-9021</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px]">Active</span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-300 font-bold flex items-center justify-center text-xs">
+                MV
+              </div>
+              <div>
+                <p class="font-bold text-xs text-slate-900 dark:text-white">Michael Vance, Esq. (Legal Counsel)</p>
+                <p class="text-[11px] text-slate-500">Attorney Review Key &bull; Key #K-4410</p>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px]">Active</span>
+          </div>
+
+        </div>
+
+        <button onclick="prompt('Enter new keyholder email address:')" class="w-full py-3 bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition border border-slate-200 dark:border-slate-700">
+          + Delegate New 256-Bit Vault Key
+        </button>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- SECTION 6: BILLING & TOKENS (#sec-user-billing)           -->
+      <!-- ========================================================= -->
+      <section id="sec-user-billing" class="dashboard-page hidden grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-bold text-[10px] uppercase">Active Plan</span>
+            <h3 class="font-serif text-xl font-bold text-slate-900 dark:text-white mt-3">Pro Estate &amp; Business</h3>
+            <p class="text-2xl font-bold text-blue-900 dark:text-blue-400 mt-2">$39 <span class="text-xs text-slate-500 font-normal">/ month</span></p>
+            <p class="text-xs text-slate-500 mt-2">Renews Oct 1, 2026</p>
+          </div>
+          <button onclick="alert('Managing plan billing...')" class="mt-6 w-full py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-900 dark:text-white font-bold text-xs rounded-xl transition">
+            Manage Subscription
+          </button>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 font-bold text-[10px] uppercase">Notary Balance</span>
+            <h3 class="font-serif text-xl font-bold text-slate-900 dark:text-white mt-3">Online Notary Tokens</h3>
+            <p class="text-2xl font-bold text-purple-600 dark:text-purple-400 mt-2">2 Tokens <span class="text-xs text-slate-500 font-normal">Available</span></p>
+            <p class="text-xs text-slate-500 mt-2">Remote Online Notarization (RON)</p>
+          </div>
+          <button onclick="alert('Purchased 1 extra notary token ($25)!')" class="mt-6 w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl transition">
+            + Purchase Notary Token ($25)
+          </button>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] uppercase">Payment Card</span>
+            <h3 class="font-serif text-xl font-bold text-slate-900 dark:text-white mt-3">Visa &bull;&bull;&bull;&bull; 4242</h3>
+            <p class="text-xs text-slate-500 mt-2">Expires 09/2028 &bull; Auto-Pay Active</p>
+          </div>
+          <button onclick="alert('Downloading PDF receipts...')" class="mt-6 w-full py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-900 dark:text-white font-bold text-xs rounded-xl transition">
+            Download Invoices (PDF)
+          </button>
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- SECTION 7: IMMUTABLE SECURITY AUDIT LOG (#sec-user-settings) -->
+      <!-- ========================================================= -->
+      <section id="sec-user-settings" class="dashboard-page hidden bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div>
+            <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Audit Trail Log</span>
+            <h2 class="font-serif text-xl font-bold text-slate-900 dark:text-white mt-1">Immutable Activity Log &amp; Security Toggles</h2>
+          </div>
+          <span class="text-xs font-mono text-emerald-500 font-bold">256-Bit Log Lock</span>
+        </div>
+
+        <div class="space-y-3 font-mono text-xs">
+          <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+            <div>
+              <p class="text-slate-900 dark:text-white font-bold">PDF Download: Last Will &amp; Testament</p>
+              <p class="text-[11px] text-slate-500">IP: 192.168.1.45 (Austin, TX) &bull; Device: macOS Chrome</p>
+            </div>
+            <span class="text-slate-400 text-[11px]">Today 09:42 AM</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+            <div>
+              <p class="text-slate-900 dark:text-white font-bold">Attorney Seal Verified: Revocable Living Trust</p>
+              <p class="text-[11px] text-slate-500">Bar Attorney Michael Vance (Texas Bar #240912)</p>
+            </div>
+            <span class="text-slate-400 text-[11px]">Sept 6, 02:15 PM</span>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4 text-xs">
+          <div class="flex items-center gap-3">
+            <input type="checkbox" checked id="2faCheck" class="w-4 h-4 text-amber-500 rounded border-slate-300">
+            <label for="2faCheck" class="font-bold text-slate-800 dark:text-slate-200">Require Hardware Passkey / 2FA for Document Downloads</label>
+          </div>
+          <button onclick="alert('Security preferences saved!')" class="px-5 py-2.5 bg-blue-900 dark:bg-blue-600 text-white font-bold text-xs rounded-xl transition">
+            Save Security Controls
+          </button>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- MODAL: PREVIEW DOCUMENT                    -->
+  <!-- ========================================== -->
+  <div id="previewModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl relative">
+      
+      <button onclick="closePreviewModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-white p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-blue-900 text-amber-400 flex items-center justify-center font-bold">
+          📜
+        </div>
+        <div>
+          <h3 id="modalDocTitle" class="font-serif text-xl font-bold text-slate-900 dark:text-white">Document Preview</h3>
+          <p class="text-xs text-emerald-500 font-bold">256-Bit Encrypted Statutory Copy</p>
+        </div>
+      </div>
+
+      <div class="bg-slate-950 text-slate-200 font-mono text-xs p-5 rounded-2xl border border-slate-800 h-64 overflow-y-auto space-y-3">
+        <p class="text-amber-400 font-bold">STATE OF TEXAS &bull; COUNTY OF TRAVIS</p>
+        <p>IN THE NAME OF GOD, AMEN. I, Sarah Jenkins, residing in the City of Austin, State of Texas, being of sound mind and disposing memory...</p>
+        <p class="text-slate-400">ARTICLE I: REVOCATION OF PRIOR WILLS &bull; ARTICLE II: APPOINTMENT OF EXECUTOR &bull; ARTICLE III: DISPOSITION OF REAL AND PERSONAL PROPERTY.</p>
+        <p class="text-emerald-400 font-bold">[ATTORNEY SEAL VERIFIED: Bar #240912]</p>
+      </div>
+
+      <div class="mt-6 flex items-center justify-end gap-3">
+        <button onclick="alert('Downloading Certified PDF...')" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs transition">
+          Download PDF
+        </button>
+        <button onclick="closePreviewModal()" class="px-5 py-2.5 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold rounded-xl text-xs transition">
+          Close Preview
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- EMBEDDED JAVASCRIPT LOGIC                  -->
+  <!-- ========================================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      initDirection();
+      
+      const hash = window.location.hash.replace('#', '');
+      if (hash && document.getElementById(hash)) {
+        showPage(null, hash);
+      } else {
+        showPage(null, 'sec-user-overview');
+      }
+    });
+
+    function initTheme() {
+      const darkToggle = document.getElementById('theme-toggle');
+      const savedTheme = localStorage.getItem('legal_doc_theme');
+
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+
+      if (darkToggle) {
+        darkToggle.addEventListener('click', () => {
+          const isDark = document.documentElement.classList.toggle('dark');
+          localStorage.setItem('legal_doc_theme', isDark ? 'dark' : 'light');
+        });
+      }
+    }
+
+    function initDirection() {
+      const rtlToggle = document.getElementById('rtl-toggle');
+      const savedDir = localStorage.getItem('legal_doc_dir') || 'ltr';
+      document.documentElement.setAttribute('dir', savedDir);
+
+      if (rtlToggle) {
+        rtlToggle.addEventListener('click', () => {
+          const currentDir = document.documentElement.getAttribute('dir');
+          const newDir = currentDir === 'rtl' ? 'ltr' : 'rtl';
+          document.documentElement.setAttribute('dir', newDir);
+          localStorage.setItem('legal_doc_dir', newDir);
+        });
+      }
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('appSidebar');
+      const backdrop = document.getElementById('userSidebarBackdrop');
+      if (sidebar) {
+        sidebar.classList.toggle('hidden');
+        sidebar.classList.toggle('flex');
+      }
+      if (backdrop) {
+        backdrop.classList.toggle('hidden');
+      }
+    }
+
+    function showPage(e, pageId) {
+      if (e && typeof e.preventDefault === 'function') e.preventDefault();
+
+      if (typeof e === 'string' && !pageId) {
+        pageId = e;
+      }
+
+      const pages = document.querySelectorAll('.dashboard-page');
+      pages.forEach(page => {
+        page.classList.add('hidden');
+      });
+
+      const targetPage = document.getElementById(pageId);
+      if (targetPage) {
+        targetPage.classList.remove('hidden');
+      }
+
+      const main = document.getElementById('mainContentArea');
+      if (main) {
+        main.scrollTop = 0;
+      }
+
+      setActiveNav(pageId);
+
+      // Auto close mobile drawer on mobile screens
+      if (window.innerWidth < 768) {
+        const sidebar = document.getElementById('appSidebar');
+        const backdrop = document.getElementById('userSidebarBackdrop');
+        if (sidebar && !sidebar.classList.contains('hidden')) {
+          sidebar.classList.add('hidden');
+          sidebar.classList.remove('flex');
+        }
+        if (backdrop) {
+          backdrop.classList.add('hidden');
+        }
+      }
+    }
+
+    function scrollToSection(e, pageId) {
+      showPage(e, pageId);
+    }
+
+    function setActiveNav(activeId) {
+      const items = document.querySelectorAll('.nav-item');
+      items.forEach(item => {
+        if (item.id === `nav-${activeId}`) {
+          item.className = "nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-blue-600 text-white font-bold transition shadow-md";
+        } else {
+          item.className = "nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition";
+        }
+      });
+    }
+
+    function filterDocs(cat) {
+      const rows = document.querySelectorAll('.doc-row');
+      const buttons = ['all', 'estate', 'business', 'realestate'];
+
+      buttons.forEach(b => {
+        const btn = document.getElementById(`btn-filter-${b}`);
+        if (btn) {
+          if (b === cat) {
+            btn.className = "px-3.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 text-blue-900 dark:text-blue-400 shadow-sm font-bold transition";
+          } else {
+            btn.className = "px-3.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition";
+          }
+        }
+      });
+
+      rows.forEach(row => {
+        if (cat === 'all' || row.getAttribute('data-category') === cat) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    function handleGlobalSearch(e) {
+      const query = e.target.value.toLowerCase();
+      const rows = document.querySelectorAll('.doc-row');
+
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(query)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    function previewDoc(title) {
+      document.getElementById('modalDocTitle').textContent = title;
+      document.getElementById('previewModal').classList.remove('hidden');
+    }
+    function closePreviewModal() {
+      document.getElementById('previewModal').classList.add('hidden');
+    }
+
+    function runGeneratorConsole() {
+      const type = document.getElementById('genType').value;
+      const state = document.getElementById('genState').value;
+      const ben = document.getElementById('genBeneficiary').value || 'Designated Beneficiary';
+
+      const consoleBox = document.getElementById('genConsole');
+      const consoleText = document.getElementById('genConsoleText');
+
+      consoleText.textContent = `Drafting ${type} for ${state} jurisdiction. Primary entity: ${ben}. Statutory execution clauses & witness signature block attached.`;
+      consoleBox.classList.remove('hidden');
+    }
+  </script>
+
+</body>
+</html>

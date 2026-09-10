@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en" class="light" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JurisDraft - Executive Admin Console & Governance</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <link rel="alternate icon" href="favicon.svg">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              800: '#102a43',
+              900: '#061727',
+              950: '#030c17',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- EMBEDDED CSS STYLES WITH MOBILE RESET -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+    *, ::before, ::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    img, svg, video, canvas, iframe {
+      max-width: 100%;
+      height: auto;
+    }
+
+    p, h1, h2, h3, h4, h5, h6, span, a, label, button, input, textarea, select {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    h1, h2, h3, h4, .font-serif {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.05);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: rgba(51, 65, 85, 0.6);
+    }
+
+    /* RTL Support */
+    [dir="rtl"] {
+      text-align: right;
+    }
+
+    html, main {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 h-screen antialiased flex overflow-hidden">
+
+  <!-- ========================================================= -->
+  <!-- ADMIN SIDEBAR NAVIGATION (NO MARKETING NAVBAR / NO FOOTER) -->
+  <!-- ========================================================= -->
+  <div id="adminSidebarBackdrop" onclick="toggleAdminSidebar()" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 md:hidden hidden transition-opacity"></div>
+  <aside id="adminSidebar" class="w-64 h-screen bg-slate-900 text-slate-300 flex-shrink-0 flex-col justify-between border-r border-slate-800 hidden md:flex fixed md:relative top-0 left-0 bottom-0 z-50 transition-all duration-300">
+    
+    <div>
+      <!-- Sidebar Brand Header -->
+      <div class="h-16 px-6 flex items-center gap-3 border-b border-slate-800 cursor-pointer" onclick="window.location.href='index.html'">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 text-amber-400 flex items-center justify-center font-bold text-base shadow-sm">
+          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18"/>
+          </svg>
+        </div>
+        <div>
+          <span class="text-lg font-bold font-serif text-white tracking-wide">JurisDraft</span>
+          <span class="block text-[10px] text-amber-400 uppercase tracking-widest font-mono font-semibold">Admin Console</span>
+        </div>
+      </div>
+
+      <!-- Admin Menu Links -->
+      <div class="px-3 py-6 space-y-1 text-xs font-medium">
+        <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Executive Desk</p>
+
+        <a href="#sec-admin-overview" id="nav-sec-admin-overview" onclick="showAdminPage(event, 'sec-admin-overview')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-blue-600 text-white font-bold transition shadow-md">
+          <div class="flex items-center gap-3 min-w-0">
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+            <span class="truncate whitespace-nowrap">Platform Overview</span>
+          </div>
+        </a>
+
+        <a href="#sec-admin-users" id="nav-sec-admin-users" onclick="showAdminPage(event, 'sec-admin-users')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <div class="flex items-center gap-3 min-w-0">
+            <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            <span class="truncate whitespace-nowrap">User Management</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-slate-800 text-blue-400 font-bold text-[10px] whitespace-nowrap flex-shrink-0">1,420</span>
+        </a>
+
+        <a href="#sec-admin-attorneys" id="nav-sec-admin-attorneys" onclick="showAdminPage(event, 'sec-admin-attorneys')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <div class="flex items-center gap-3 min-w-0">
+            <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span class="truncate whitespace-nowrap">Attorney Reviews</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-amber-950 text-amber-300 font-bold text-[10px] whitespace-nowrap flex-shrink-0">8 Pending</span>
+        </a>
+
+        <a href="#sec-admin-vault" id="nav-sec-admin-vault" onclick="showAdminPage(event, 'sec-admin-vault')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <div class="flex items-center gap-3 min-w-0">
+            <svg class="w-4 h-4 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span class="truncate whitespace-nowrap">Vault Security</span>
+          </div>
+        </a>
+
+        <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider pt-4 mb-2">Operations &amp; Governance</p>
+
+        <a href="#sec-admin-notary" id="nav-sec-admin-notary" onclick="showAdminPage(event, 'sec-admin-notary')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <div class="flex items-center gap-3 min-w-0">
+            <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            <span class="truncate whitespace-nowrap">Notary Dispatch</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 font-bold text-[10px] whitespace-nowrap flex-shrink-0">3 Live</span>
+        </a>
+
+        <a href="#sec-admin-billing" id="nav-sec-admin-billing" onclick="showAdminPage(event, 'sec-admin-billing')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <div class="flex items-center gap-3 min-w-0">
+            <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span class="truncate whitespace-nowrap">Financials &amp; Revenue</span>
+          </div>
+        </a>
+
+        <a href="#sec-admin-settings" id="nav-sec-admin-settings" onclick="showAdminPage(event, 'sec-admin-settings')" class="nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <div class="flex items-center gap-3 min-w-0">
+            <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span class="truncate whitespace-nowrap">System Controls</span>
+          </div>
+        </a>
+
+        <a href="index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white transition">
+          <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span class="truncate whitespace-nowrap">Back to Main Website</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Sidebar Bottom User Card -->
+    <div class="p-4 border-t border-slate-800">
+      <div class="bg-slate-800/80 p-3 rounded-2xl flex items-center justify-between border border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-amber-400 text-slate-950 font-bold flex items-center justify-center text-xs">
+            AV
+          </div>
+          <div>
+            <p class="font-bold text-xs text-white">Alexander Vance</p>
+            <p class="text-[10px] text-amber-400">Super Admin</p>
+          </div>
+        </div>
+        <button onclick="window.location.href='index.html'" title="Exit Console" class="p-1.5 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </aside>
+
+
+  <!-- ========================================================= -->
+  <!-- MAIN APPLICATION CONTENT AREA                             -->
+  <!-- ========================================================= -->
+  <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+    
+    <!-- APP HEADER BAR -->
+    <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 sm:px-8 flex-shrink-0 z-30">
+      
+      <div class="flex items-center gap-3">
+        <!-- Mobile Sidebar Toggle Button -->
+        <button onclick="toggleAdminSidebar()" class="md:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+
+        <!-- Global Admin Search Bar -->
+        <div class="relative w-48 sm:w-80">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" id="adminGlobalSearch" onkeyup="handleAdminSearch(event)" placeholder="Search users, attorney IDs, statutory codes..." class="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-amber-500">
+        </div>
+      </div>
+
+      <!-- Header Action Controls -->
+      <div class="flex items-center gap-3">
+        
+        <!-- Live System Status Badge -->
+        <div class="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300 text-xs font-bold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>System Healthy &bull; 99.99% Uptime</span>
+        </div>
+
+        <!-- System Alerts Bell -->
+        <button onclick="alert('System Alert: 3 statutory updates pending approval for California & New York Probate Codes.')" class="relative p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+        </button>
+
+        <!-- Dark Mode Toggle -->
+        <button id="theme-toggle" title="Toggle Dark Mode" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium border border-slate-200 dark:border-slate-700">
+          <span id="theme-toggle-icon">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          </span>
+        </button>
+
+        <!-- RTL / LTR Toggle -->
+        <button id="rtl-toggle" title="Toggle RTL / LTR" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium border border-slate-200 dark:border-slate-700">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 3 4 7l4 4M4 7h16M16 21l4-4-4-4M20 17H4"/></svg>
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <!-- SCROLLABLE DASHBOARD CONTENT CONTAINER -->
+    <main id="adminMainContent" class="flex-1 overflow-y-auto p-4 sm:p-8 space-y-8">
+      
+      <!-- ========================================================= -->
+      <!-- PAGE 1: EXECUTIVE PLATFORM OVERVIEW (#sec-admin-overview) -->
+      <!-- ========================================================= -->
+      <section id="sec-admin-overview" class="admin-page space-y-6">
+        
+        <!-- Admin Welcome Banner -->
+        <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-950 rounded-3xl p-6 sm:p-8 text-white border border-slate-800 shadow-xl relative overflow-hidden">
+          <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold uppercase tracking-wider mb-3">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span>Super Admin Desk &bull; All 50 State Rules Live</span>
+              </div>
+              <h1 class="font-serif text-2xl sm:text-4xl font-bold">JurisDraft <span class="text-amber-400">Executive Governance</span></h1>
+              <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-xl">
+                Real-time oversight of user legal vaults, bar attorney audit queues, notary sessions, and statutory code distribution.
+              </p>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+              <button onclick="showAdminPage(null, 'sec-admin-users')" class="px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shadow-lg flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                <span>Manage Users &amp; Licenses</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Key Metric Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer hover:border-amber-500 transition" onclick="showAdminPage(null, 'sec-admin-users')">
+            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-2">
+              <span>Total Active Users</span>
+              <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center">👥</div>
+            </div>
+            <p class="font-serif text-3xl font-bold text-slate-900 dark:text-white">1,420</p>
+            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-semibold">&uarr; +148 new this month</p>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer hover:border-amber-500 transition" onclick="showAdminPage(null, 'sec-admin-attorneys')">
+            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-2">
+              <span>Pending Attorney Reviews</span>
+              <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center">⚖️</div>
+            </div>
+            <p class="font-serif text-3xl font-bold text-amber-600 dark:text-amber-400">8 Audits</p>
+            <p class="text-[11px] text-slate-500 mt-1 font-semibold">24-Hour SLA On Track</p>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer hover:border-amber-500 transition" onclick="showAdminPage(null, 'sec-admin-billing')">
+            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-2">
+              <span>Monthly Revenue (MRR)</span>
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">💰</div>
+            </div>
+            <p class="font-serif text-3xl font-bold text-emerald-600 dark:text-emerald-400">$55,380</p>
+            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 font-semibold">&uarr; +12.4% vs last month</p>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer hover:border-amber-500 transition" onclick="showAdminPage(null, 'sec-admin-vault')">
+            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold mb-2">
+              <span>Vault Documents Encrypted</span>
+              <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center">🛡️</div>
+            </div>
+            <p class="font-serif text-3xl font-bold text-purple-600 dark:text-purple-400">8,940</p>
+            <p class="text-[11px] text-slate-500 mt-1 font-semibold">AES-256 Zero-Knowledge</p>
+          </div>
+
+        </div>
+
+        <!-- Executive Quick Actions & Platform Health Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <div class="lg:col-span-8 bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 gap-3">
+              <div>
+                <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Platform Activity Monitor</span>
+                <h3 class="font-serif text-lg font-bold text-slate-900 dark:text-white mt-1">Recent Admin Security &amp; Legal Dispatch Events</h3>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] whitespace-nowrap flex-shrink-0 ml-3">Real-Time Feed</span>
+            </div>
+
+            <div class="space-y-3 text-xs font-mono">
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-3">
+                <div class="min-w-0 flex-1">
+                  <p class="font-bold text-slate-900 dark:text-white">[BAR VERIFICATION] Attorney Michael Vance approved TX Last Will #W-8821</p>
+                  <p class="text-[11px] text-slate-500">Texas Jurisdiction Code § 251.104 Certified &bull; Client: Sarah Jenkins</p>
+                </div>
+                <span class="text-slate-400 text-[11px] whitespace-nowrap flex-shrink-0 text-right">10 mins ago</span>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-3">
+                <div class="min-w-0 flex-1">
+                  <p class="font-bold text-slate-900 dark:text-white">[NOTARY SESSION] Remote Online Notarization completed in Travis County, TX</p>
+                  <p class="text-[11px] text-slate-500">RON Session Token #RON-9012 &bull; Notary ID: #N-4019</p>
+                </div>
+                <span class="text-slate-400 text-[11px] whitespace-nowrap flex-shrink-0 text-right">35 mins ago</span>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-3">
+                <div class="min-w-0 flex-1">
+                  <p class="font-bold text-amber-500 dark:text-amber-400">[STATUTORY UPDATE] California Probate Code § 6110 Amendment Sync Requested</p>
+                  <p class="text-[11px] text-slate-500">Automatic Statutory Rule Engine Pending Super Admin Seal</p>
+                </div>
+                <span class="text-slate-400 text-[11px] whitespace-nowrap flex-shrink-0 text-right">1 hour ago</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-4 bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-4">
+            <div>
+              <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Global Governance</span>
+              <h3 class="font-serif text-lg font-bold text-slate-900 dark:text-white mt-1">Admin Dispatch Tools</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
+                Trigger emergency platform maintenance, dispatch statutory rule updates, or broadcast notifications to bar attorneys.
+              </p>
+            </div>
+
+            <div class="space-y-2">
+              <button onclick="runStatutoryUpdate()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition shadow-md">
+                Sync 50-State Statutory Codes
+              </button>
+              <button onclick="alert('Dispatching Attorney Queue Re-balancer...')" class="w-full py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-900 dark:text-white font-bold text-xs rounded-xl transition">
+                Re-balance Attorney Review Queue
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- PAGE 2: USER & LICENSE MANAGEMENT (#sec-admin-users)     -->
+      <!-- ========================================================= -->
+      <section id="sec-admin-users" class="admin-page hidden bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">User Governance Desk</span>
+            <h2 class="font-serif text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">Platform Users &amp; Subscription Licenses</h2>
+          </div>
+
+          <!-- User Filter Buttons -->
+          <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-semibold overflow-x-auto max-w-full">
+            <button id="btn-user-all" onclick="filterUserList('all')" class="px-3.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-sm font-bold transition whitespace-nowrap flex-shrink-0">All Users (1,420)</button>
+            <button id="btn-user-pro" onclick="filterUserList('pro')" class="px-3.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap flex-shrink-0">Pro Tier (890)</button>
+            <button id="btn-user-firm" onclick="filterUserList('firm')" class="px-3.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap flex-shrink-0">Firm Enterprise (340)</button>
+            <button id="btn-user-free" onclick="filterUserList('free')" class="px-3.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition whitespace-nowrap flex-shrink-0">Free Tier (190)</button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 w-full">
+          <table class="w-full min-w-[850px] text-left text-xs text-slate-700 dark:text-slate-300">
+            <thead class="bg-slate-50 dark:bg-slate-800/80 uppercase font-bold text-[11px] text-slate-500 border-b border-slate-200 dark:border-slate-800">
+              <tr>
+                <th class="px-6 py-4 whitespace-nowrap min-w-[200px]">User Details</th>
+                <th class="px-6 py-4 whitespace-nowrap">Subscription Plan</th>
+                <th class="px-6 py-4 whitespace-nowrap">State Jurisdiction</th>
+                <th class="px-6 py-4 whitespace-nowrap">Saved Vault Drafts</th>
+                <th class="px-6 py-4 whitespace-nowrap">Status</th>
+                <th class="px-6 py-4 text-right whitespace-nowrap">Admin Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminUserTableBody" class="divide-y divide-slate-200 dark:divide-slate-800">
+              
+              <!-- User 1 -->
+              <tr data-tier="pro" class="user-row hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <td class="px-6 py-4 font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-amber-400 text-slate-950 font-bold flex items-center justify-center text-xs">SJ</div>
+                  <div>
+                    <p class="font-bold text-sm user-name">Sarah Jenkins</p>
+                    <p class="text-[11px] text-slate-500 font-normal">sarah.j@apexlegal.com</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <span class="px-2.5 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-bold text-[10px]">Pro Member ($39/mo)</span>
+                </td>
+                <td class="px-6 py-4 font-medium">Texas (TX)</td>
+                <td class="px-6 py-4 font-bold">12 Drafts</td>
+                <td class="px-6 py-4">
+                  <span class="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px]">Active</span>
+                </td>
+                <td class="px-6 py-4 text-right space-x-2">
+                  <button onclick="alert('Viewing Sarah Jenkins Audit File...')" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950 font-bold transition">Inspect</button>
+                  <button onclick="alert('Account privileges updated.')" class="px-3 py-1.5 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-bold transition">Manage</button>
+                </td>
+              </tr>
+
+              <!-- User 2 -->
+              <tr data-tier="firm" class="user-row hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <td class="px-6 py-4 font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center text-xs">RM</div>
+                  <div>
+                    <p class="font-bold text-sm user-name">Robert Miller, Esq.</p>
+                    <p class="text-[11px] text-slate-500 font-normal">miller@millerlawgroup.com</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <span class="px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 font-bold text-[10px]">Firm Enterprise ($299/mo)</span>
+                </td>
+                <td class="px-6 py-4 font-medium">California (CA)</td>
+                <td class="px-6 py-4 font-bold">84 Drafts</td>
+                <td class="px-6 py-4">
+                  <span class="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px]">Active</span>
+                </td>
+                <td class="px-6 py-4 text-right space-x-2">
+                  <button onclick="alert('Viewing Firm Enterprise Account...')" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950 font-bold transition">Inspect</button>
+                </td>
+              </tr>
+
+              <!-- User 3 -->
+              <tr data-tier="free" class="user-row hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <td class="px-6 py-4 font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-slate-400 text-slate-950 font-bold flex items-center justify-center text-xs">DL</div>
+                  <div>
+                    <p class="font-bold text-sm user-name">David Lawson</p>
+                    <p class="text-[11px] text-slate-500 font-normal">david.l@gmail.com</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <span class="px-2.5 py-1 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-[10px]">Free Tier ($0)</span>
+                </td>
+                <td class="px-6 py-4 font-medium">New York (NY)</td>
+                <td class="px-6 py-4 font-bold">1 Draft</td>
+                <td class="px-6 py-4">
+                  <span class="px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold text-[10px]">Trial Expiry Pending</span>
+                </td>
+                <td class="px-6 py-4 text-right space-x-2">
+                  <button onclick="alert('Upgrade invitation sent.')" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold transition">Send Upgrade Offer</button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- PAGE 3: ATTORNEY REVIEW QUEUE (#sec-admin-attorneys)     -->
+      <!-- ========================================================= -->
+      <section id="sec-admin-attorneys" class="admin-page hidden bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 gap-3">
+          <div>
+            <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Bar Attorney SLA Control</span>
+            <h2 class="font-serif text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">Pending Attorney Document Verification Queue</h2>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold text-[10px] whitespace-nowrap flex-shrink-0 ml-3">8 Documents Waiting</span>
+        </div>
+
+        <div class="space-y-4">
+          
+          <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-bold flex items-center justify-center text-lg flex-shrink-0">📜</div>
+              <div>
+                <p class="font-bold text-sm text-slate-900 dark:text-white">Texas Revocable Living Trust &bull; #DOC-9018</p>
+                <p class="text-xs text-slate-500">Submitted by: Sarah Jenkins &bull; State: Texas (TX) &bull; Target SLA: 14 Hours Remaining</p>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between w-full md:w-auto gap-3">
+              <span class="text-xs font-bold text-emerald-500">Assigned: Michael Vance, Esq. (TX Bar #240912)</span>
+              <button onclick="alert('Sealing & Certifying Document...')" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition whitespace-nowrap flex-shrink-0">Super Admin Seal</button>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 font-bold flex items-center justify-center text-lg flex-shrink-0">💼</div>
+              <div>
+                <p class="font-bold text-sm text-slate-900 dark:text-white">Delaware LLC Operating Agreement &bull; #DOC-4402</p>
+                <p class="text-xs text-slate-500">Submitted by: Apex Digital Legal LLC &bull; State: Delaware (DE) &bull; Target SLA: 6 Hours Remaining</p>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between w-full md:w-auto gap-3">
+              <span class="text-xs font-bold text-amber-500">Unassigned (In Dispatch Queue)</span>
+              <button onclick="alert('Assigned to DE Bar Counsel!')" class="px-4 py-2 bg-blue-900 dark:bg-blue-600 hover:bg-blue-800 text-white font-bold text-xs rounded-xl transition whitespace-nowrap flex-shrink-0">Assign Bar Attorney</button>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- PAGE 4: VAULT SECURITY AUDIT LOG (#sec-admin-vault)       -->
+      <!-- ========================================================= -->
+      <section id="sec-admin-vault" class="admin-page hidden bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        
+        <div>
+          <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Zero-Knowledge Governance</span>
+          <h2 class="font-serif text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">Platform Cryptographic Vault Security Log</h2>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">256-bit AES key delegations, HSM tamper protection, and immutable access trails.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <h3 class="font-bold text-xs text-slate-500 uppercase">Vault Master Keys</h3>
+            <p class="font-serif text-2xl font-bold text-emerald-500 mt-2">Zero-Knowledge</p>
+            <p class="text-[11px] text-slate-500 mt-1">Client-side HSM Key Lock Active</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <h3 class="font-bold text-xs text-slate-500 uppercase">Delegated Keys</h3>
+            <p class="font-serif text-2xl font-bold text-purple-500 mt-2">2,840 Active</p>
+            <p class="text-[11px] text-slate-500 mt-1">Beneficiary &amp; Trustee Access</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <h3 class="font-bold text-xs text-slate-500 uppercase">Intrusion Attempts</h3>
+            <p class="font-serif text-2xl font-bold text-blue-500 mt-2">0 Blocked Today</p>
+            <p class="text-[11px] text-slate-500 mt-1">SOC-2 Type II Firewall Active</p>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- PAGE 5: NOTARY SESSION DISPATCH (#sec-admin-notary)        -->
+      <!-- ========================================================= -->
+      <section id="sec-admin-notary" class="admin-page hidden bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div>
+            <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Remote Online Notarization</span>
+            <h2 class="font-serif text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">Live Audio-Visual Notary Dispatch Desk</h2>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px]">3 Sessions Active Now</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-900 dark:text-white">Session #RON-9012</span>
+              <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-bold text-[10px]">LIVE</span>
+            </div>
+            <p class="text-xs text-slate-500">State: Texas (TX) &bull; Signer: Sarah Jenkins</p>
+            <button onclick="alert('Monitoring live RON audio-visual feed...')" class="w-full py-2 bg-blue-900 dark:bg-blue-600 text-white font-bold text-xs rounded-xl transition">Join Admin Monitor Room</button>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-900 dark:text-white">Session #RON-9013</span>
+              <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-bold text-[10px]">LIVE</span>
+            </div>
+            <p class="text-xs text-slate-500">State: California (CA) &bull; Signer: Robert Miller</p>
+            <button onclick="alert('Monitoring live RON audio-visual feed...')" class="w-full py-2 bg-blue-900 dark:bg-blue-600 text-white font-bold text-xs rounded-xl transition">Join Admin Monitor Room</button>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-900 dark:text-white">Session #RON-9014</span>
+              <span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-bold text-[10px]">QUEUED</span>
+            </div>
+            <p class="text-xs text-slate-500">State: Florida (FL) &bull; Signer: David Lawson</p>
+            <button onclick="alert('Notary assigned to queue!')" class="w-full py-2 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl transition">Dispatch Notary Partner</button>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- PAGE 6: FINANCIALS & BILLING (#sec-admin-billing)          -->
+      <!-- ========================================================= -->
+      <section id="sec-admin-billing" class="admin-page hidden bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        
+        <div>
+          <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Financial Analytics</span>
+          <h2 class="font-serif text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">Platform Revenue &amp; Token Sales Report</h2>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">Monthly recurring revenue (MRR), subscription billing, and notary token payouts.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="p-5 rounded-2xl bg-blue-50 dark:bg-slate-800 border border-blue-200 dark:border-slate-700">
+            <p class="text-xs font-bold text-slate-500 uppercase">Gross Revenue (YTD)</p>
+            <p class="font-serif text-3xl font-bold text-blue-900 dark:text-blue-400 mt-2">$642,800</p>
+            <p class="text-xs text-emerald-600 dark:text-emerald-400 mt-1 font-semibold">&uarr; +18.2% YoY</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-purple-50 dark:bg-slate-800 border border-purple-200 dark:border-slate-700">
+            <p class="text-xs font-bold text-slate-500 uppercase">Notary Token Sales</p>
+            <p class="font-serif text-3xl font-bold text-purple-600 dark:text-purple-400 mt-2">$34,250</p>
+            <p class="text-xs text-slate-500 mt-1">1,370 Tokens Redeemed</p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-emerald-50 dark:bg-slate-800 border border-emerald-200 dark:border-slate-700">
+            <p class="text-xs font-bold text-slate-500 uppercase">Attorney Review Payouts</p>
+            <p class="font-serif text-3xl font-bold text-emerald-600 dark:text-emerald-400 mt-2">$18,400</p>
+            <p class="text-xs text-slate-500 mt-1">Bar Certified Attorneys Paid</p>
+          </div>
+        </div>
+
+        <button onclick="alert('Downloading Financial Audit CSV & PDF Report...')" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition">
+          Export Full Financial Audit Report (PDF/CSV)
+        </button>
+
+      </section>
+
+
+      <!-- ========================================================= -->
+      <!-- PAGE 7: SYSTEM SETTINGS & LAW CONTROLS (#sec-admin-settings) -->
+      <!-- ========================================================= -->
+      <section id="sec-admin-settings" class="admin-page hidden bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+        
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div>
+            <span class="text-amber-600 dark:text-amber-400 font-bold text-xs uppercase tracking-widest">Platform Governance</span>
+            <h2 class="font-serif text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">System Toggles &amp; Statutory Code Engine</h2>
+          </div>
+          <span class="text-xs font-mono text-emerald-500 font-bold">50-State Statutory Engine Live</span>
+        </div>
+
+        <div class="space-y-4 text-xs">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+            <div>
+              <p class="font-bold text-slate-900 dark:text-white text-sm">Automated Texas Estate Code § 251.104 Execution Validation</p>
+              <p class="text-slate-500 mt-0.5">Enforces self-proving affidavit language across all Texas Last Will drafts automatically.</p>
+            </div>
+            <input type="checkbox" checked class="w-5 h-5 text-amber-500 rounded border-slate-300">
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+            <div>
+              <p class="font-bold text-slate-900 dark:text-white text-sm">Mandatory Hardware Passkey / 2FA for Admin Key Exports</p>
+              <p class="text-slate-500 mt-0.5">Requires WebAuthn / YubiKey authentication before Super Admin key overrides.</p>
+            </div>
+            <input type="checkbox" checked class="w-5 h-5 text-amber-500 rounded border-slate-300">
+          </div>
+        </div>
+
+        <button onclick="alert('Platform governance settings updated!')" class="px-6 py-3 bg-blue-900 dark:bg-blue-600 hover:bg-blue-800 text-white font-bold text-xs rounded-xl transition">
+          Save Governance Settings
+        </button>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- EMBEDDED JAVASCRIPT LOGIC                  -->
+  <!-- ========================================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      initDirection();
+      
+      const hash = window.location.hash.replace('#', '');
+      if (hash && document.getElementById(hash)) {
+        showAdminPage(null, hash);
+      } else {
+        showAdminPage(null, 'sec-admin-overview');
+      }
+    });
+
+    function initTheme() {
+      const darkToggle = document.getElementById('theme-toggle');
+      const savedTheme = localStorage.getItem('legal_doc_theme');
+
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+
+      if (darkToggle) {
+        darkToggle.addEventListener('click', () => {
+          const isDark = document.documentElement.classList.toggle('dark');
+          localStorage.setItem('legal_doc_theme', isDark ? 'dark' : 'light');
+        });
+      }
+    }
+
+    function initDirection() {
+      const rtlToggle = document.getElementById('rtl-toggle');
+      const savedDir = localStorage.getItem('legal_doc_dir') || 'ltr';
+      document.documentElement.setAttribute('dir', savedDir);
+
+      if (rtlToggle) {
+        rtlToggle.addEventListener('click', () => {
+          const currentDir = document.documentElement.getAttribute('dir');
+          const newDir = currentDir === 'rtl' ? 'ltr' : 'rtl';
+          document.documentElement.setAttribute('dir', newDir);
+          localStorage.setItem('legal_doc_dir', newDir);
+        });
+      }
+    }
+
+    function toggleAdminSidebar() {
+      const sidebar = document.getElementById('adminSidebar');
+      const backdrop = document.getElementById('adminSidebarBackdrop');
+      if (sidebar) {
+        sidebar.classList.toggle('hidden');
+        sidebar.classList.toggle('flex');
+      }
+      if (backdrop) {
+        backdrop.classList.toggle('hidden');
+      }
+    }
+
+    function showAdminPage(e, pageId) {
+      if (e && typeof e.preventDefault === 'function') e.preventDefault();
+
+      if (typeof e === 'string' && !pageId) {
+        pageId = e;
+      }
+
+      const pages = document.querySelectorAll('.admin-page');
+      pages.forEach(page => {
+        page.classList.add('hidden');
+      });
+
+      const targetPage = document.getElementById(pageId);
+      if (targetPage) {
+        targetPage.classList.remove('hidden');
+      }
+
+      const main = document.getElementById('adminMainContent');
+      if (main) {
+        main.scrollTop = 0;
+      }
+
+      setActiveAdminNav(pageId);
+
+      // Auto close mobile drawer on mobile screens
+      if (window.innerWidth < 768) {
+        const sidebar = document.getElementById('adminSidebar');
+        const backdrop = document.getElementById('adminSidebarBackdrop');
+        if (sidebar && !sidebar.classList.contains('hidden')) {
+          sidebar.classList.add('hidden');
+          sidebar.classList.remove('flex');
+        }
+        if (backdrop) {
+          backdrop.classList.add('hidden');
+        }
+      }
+    }
+
+    function setActiveAdminNav(activeId) {
+      const items = document.querySelectorAll('.nav-item');
+      items.forEach(item => {
+        if (item.id === `nav-${activeId}`) {
+          item.className = "nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-blue-600 text-white font-bold transition shadow-md";
+        } else {
+          item.className = "nav-item flex items-center justify-between px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition";
+        }
+      });
+    }
+
+    function filterUserList(tier) {
+      const rows = document.querySelectorAll('.user-row');
+      const buttons = ['all', 'pro', 'firm', 'free'];
+
+      buttons.forEach(b => {
+        const btn = document.getElementById(`btn-user-${b}`);
+        if (btn) {
+          if (b === tier) {
+            btn.className = "px-3.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-sm font-bold transition";
+          } else {
+            btn.className = "px-3.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition";
+          }
+        }
+      });
+
+      rows.forEach(row => {
+        if (tier === 'all' || row.getAttribute('data-tier') === tier) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    function handleAdminSearch(e) {
+      const query = e.target.value.toLowerCase();
+      const rows = document.querySelectorAll('.user-row');
+
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(query)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    function runStatutoryUpdate() {
+      alert('Statutory Rule Engine updated successfully! Synced statutory execution clauses for Texas, California, New York, Florida, and Delaware.');
+    }
+  </script>
+
+</body>
+</html>

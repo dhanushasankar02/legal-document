@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en" class="light" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JurisDraft - Legal Document Platform</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+  <link rel="alternate icon" href="favicon.svg">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              800: '#102a43',
+              900: '#061727',
+              950: '#030c17',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- EMBEDDED CSS STYLES -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    h1, h2, h3, .font-serif {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    /* RTL Layout Direction Support */
+    [dir="rtl"] {
+      text-align: right;
+    }
+
+    [dir="rtl"] .dropdown-menu {
+      left: auto;
+      right: 0;
+    }
+
+    /* Dropdown Animation */
+    .dropdown-menu {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(6px);
+      transition: all 0.2s ease-in-out;
+    }
+
+    .dropdown-container:hover .dropdown-menu,
+    .dropdown-container:focus-within .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    *, ::before, ::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      max-width: 100vw;
+      overflow-x: clip;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    img, svg, video, canvas, iframe {
+      max-width: 100%;
+      height: auto;
+    }
+
+    p, h1, h2, h3, h4, h5, h6, span, a, label, button, input, textarea, select {
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    /* Glassmorphic Single-Line Navbar */
+    .navbar-glass {
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .dark .navbar-glass {
+      background-color: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .one-line-nav {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    /* Unique Hero Background Styling */
+    .hero-bg {
+      background-image: linear-gradient(to bottom, rgba(6, 23, 39, 0.88), rgba(15, 23, 42, 0.96)), 
+                        url('images/index_hero.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased w-full">
+
+  <!-- ========================================================= -->
+  <!-- 1. NAVBAR SECTION (Responsive Header with Mobile Drawer)   -->
+  <!-- ========================================================= -->
+  <header class="sticky top-0 z-50 navbar-glass border-b border-slate-200 dark:border-slate-800 shadow-sm">
+    <div class="max-w-[1440px] mx-auto px-4">
+      <div class="flex items-center justify-between h-16 w-full gap-2 sm:gap-4">
+
+        <!-- Brand Logo with Scale / Gavel SVG -->
+        <a href="index.html" class="flex items-center gap-2.5 cursor-pointer flex-shrink-0 group">
+          <div class="w-8 h-8 rounded-lg bg-blue-900 dark:bg-blue-600 text-amber-400 flex items-center justify-center font-bold text-base shadow-sm group-hover:scale-105 transition-transform">
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18"/>
+            </svg>
+          </div>
+          <span class="text-xl font-bold font-serif text-blue-950 dark:text-white whitespace-nowrap">JurisDraft</span>
+        </a>
+
+        <!-- Desktop Navigation Links (Hidden on < lg) -->
+        <nav class="hidden lg:flex items-center gap-2 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200">
+
+          <!-- 1. Home ▾ Dropdown -->
+          <div class="relative dropdown-container py-2 flex-shrink-0">
+            <button class="flex items-center gap-1 px-2.5 py-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+              <span>Home</span>
+              <svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 w-44 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-800 p-1.5 z-50">
+              <a href="index.html" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 transition">
+                <svg class="w-4 h-4 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                <span class="font-semibold text-xs whitespace-nowrap">Home 1</span>
+              </a>
+
+              <a href="home2.html" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 transition">
+                <svg class="w-4 h-4 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+                </svg>
+                <span class="font-semibold text-xs whitespace-nowrap">Home 2</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- 2. Documents -->
+          <a href="documents.html" class="px-2.5 py-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition whitespace-nowrap">
+            Documents
+          </a>
+
+          <!-- 3. How It Works -->
+          <a href="how-it-works.html" class="px-2.5 py-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition whitespace-nowrap">
+            How It Works
+          </a>
+
+          <!-- 4. Pricing -->
+          <a href="pricing.html" class="px-2.5 py-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition whitespace-nowrap">
+            Pricing
+          </a>
+
+          <!-- 5. Security & Privacy -->
+          <a href="security.html" class="px-2.5 py-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition whitespace-nowrap">
+            Security & Privacy
+          </a>
+
+          <!-- 6. Contact -->
+          <a href="contact.html" class="px-2.5 py-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition whitespace-nowrap">
+            Contact
+          </a>
+
+          <!-- 7. Dashboard ▾ Dropdown -->
+          <div class="relative dropdown-container py-2 flex-shrink-0">
+            <button class="flex items-center gap-1 px-2.5 py-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition font-semibold text-blue-900 dark:text-blue-400">
+              <span>Dashboard</span>
+              <svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu absolute top-full left-0 w-48 bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-800 p-1.5 z-50">
+              <a href="user-dashboard.html" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 transition">
+                <svg class="w-4 h-4 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span class="font-semibold text-xs whitespace-nowrap">User Dashboard</span>
+              </a>
+
+              <a href="admin-dashboard.html" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 transition">
+                <svg class="w-4 h-4 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4"/>
+                </svg>
+                <span class="font-semibold text-xs whitespace-nowrap">Admin Dashboard</span>
+              </a>
+            </div>
+          </div>
+
+        </nav>
+
+        <!-- Right Side Desktop Actions (Hidden on < lg) -->
+        <div class="hidden lg:flex items-center gap-2 flex-shrink-0">
+          
+          <!-- 🌙 Dark Mode -->
+          <button id="theme-toggle" title="Toggle Dark Mode" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium border border-slate-200 dark:border-slate-700 whitespace-nowrap">
+            <span id="theme-toggle-icon" class="flex items-center">
+              <svg class="w-4 h-4 text-slate-700 dark:text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+              </svg>
+            </span>
+            <span id="theme-toggle-text">Dark Mode</span>
+          </button>
+
+          <!-- ↔️ RTL / LTR Toggle -->
+          <button id="rtl-toggle" title="Toggle RTL / LTR" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium border border-slate-200 dark:border-slate-700 whitespace-nowrap">
+            <svg class="w-4 h-4 text-slate-700 dark:text-slate-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 3 4 7l4 4"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="m16 21 4-4-4-4"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20 17H4"/>
+            </svg>
+            <span id="rtl-toggle-text">RTL / LTR</span>
+          </button>
+
+          <!-- Login Button -->
+          <a href="login.html" class="btn-login-open flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-blue-900 hover:bg-blue-800 dark:bg-blue-600 text-white font-medium text-xs shadow-sm whitespace-nowrap">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+              <polyline points="10 17 15 12 10 7"/>
+              <line x1="15" y1="12" x2="3" y2="12"/>
+            </svg>
+            <span>Login</span>
+          </a>
+        </div>
+
+        <!-- Mobile Controls (Visible on < lg) -->
+        <div class="flex lg:hidden items-center gap-2">
+          <!-- Mobile Hamburger Toggle Button -->
+          <button id="mobile-menu-btn" onclick="toggleMobileMenu()" title="Toggle Navigation Menu" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition focus:outline-none">
+            <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Hamburger Right-Side Drawer Backdrop -->
+    <div id="mobile-menu-backdrop" onclick="toggleMobileMenu()" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-[50] transition-opacity duration-300 opacity-0 pointer-events-none"></div>
+
+    <!-- Mobile Hamburger Right-Side Off-Canvas Floating Card Drawer -->
+    <div id="mobile-menu-panel" class="fixed top-3 right-3 z-[55] h-[calc(100vh-24px)] w-[300px] sm:w-[320px] max-w-[calc(100vw-24px)] bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-[28px] shadow-2xl border border-slate-200/90 dark:border-slate-800 flex flex-col justify-between transition-transform duration-300 transform translate-x-[calc(100%+30px)]">
+      
+      <!-- Drawer Top Bar Header -->
+      <div class="flex items-center justify-between px-5 pt-5 pb-3 border-b border-slate-100 dark:border-slate-800/80">
+        <!-- Brand Logo -->
+        <a href="index.html" class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-blue-900 dark:bg-blue-600 text-amber-400 flex items-center justify-center font-bold text-base shadow-sm">
+            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18"/>
+            </svg>
+          </div>
+          <span class="text-lg font-bold font-serif text-blue-950 dark:text-white">JurisDraft</span>
+        </a>
+
+        <!-- Close Button -->
+        <button onclick="toggleMobileMenu()" title="Close Menu" class="p-2 rounded-full text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Drawer Content Navigation Links -->
+      <div class="flex-1 overflow-y-auto px-4 py-4 space-y-2">
+        
+        <!-- Collapsible Home Pill Box -->
+        <div class="bg-amber-50/70 dark:bg-slate-800/60 border border-amber-100/60 dark:border-slate-700/50 rounded-2xl p-1">
+          <button onclick="toggleDrawerSubmenu('drawer-home-submenu')" class="flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl font-medium text-sm text-slate-800 dark:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-700/60 transition">
+            <span class="flex items-center gap-2 font-semibold">
+              <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+              Home
+            </span>
+            <svg id="drawer-home-arrow" class="w-4 h-4 text-slate-500 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/></svg>
+          </button>
+          <div id="drawer-home-submenu" class="hidden pl-4 pr-2 py-1.5 space-y-1">
+            <a href="index.html" class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-amber-100/50 dark:hover:bg-slate-700 transition">
+              <span>• Home 1 (Main Landing)</span>
+            </a>
+            <a href="home2.html" class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-amber-100/50 dark:hover:bg-slate-700 transition">
+              <span>• Home 2 (Corporate/Enterprise)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="space-y-1 pt-1">
+          <a href="documents.html" class="flex items-center px-3.5 py-2.5 rounded-xl font-medium text-sm text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            Documents
+          </a>
+          <a href="how-it-works.html" class="flex items-center px-3.5 py-2.5 rounded-xl font-medium text-sm text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            How It Works
+          </a>
+          <a href="pricing.html" class="flex items-center px-3.5 py-2.5 rounded-xl font-medium text-sm text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            Pricing
+          </a>
+          <a href="security.html" class="flex items-center px-3.5 py-2.5 rounded-xl font-medium text-sm text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            Security & Privacy
+          </a>
+          <a href="contact.html" class="flex items-center px-3.5 py-2.5 rounded-xl font-medium text-sm text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            Contact
+          </a>
+        </nav>
+
+        <!-- Collapsible Dashboards Pill Box -->
+        <div class="bg-slate-100/70 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-700/50 rounded-2xl p-1 mt-2">
+          <button onclick="toggleDrawerSubmenu('drawer-dashboards-submenu')" class="flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl font-medium text-sm text-slate-800 dark:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-700/60 transition">
+            <span class="flex items-center gap-2 font-semibold">
+              <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              Dashboards
+            </span>
+            <svg id="drawer-dashboards-arrow" class="w-4 h-4 text-slate-500 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/></svg>
+          </button>
+          <div id="drawer-dashboards-submenu" class="hidden pl-4 pr-2 py-1.5 space-y-1">
+            <a href="user-dashboard.html" class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-blue-900 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition">
+              <span>• User Dashboard</span>
+            </a>
+            <a href="admin-dashboard.html" class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-700 transition">
+              <span>• Admin Dashboard</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Drawer Footer Controls & Log In Button -->
+      <div class="p-4 pt-2 border-t border-slate-100 dark:border-slate-800/80 bg-white dark:bg-slate-900 space-y-3">
+        
+        <!-- Controls Pill Container: Theme & RTL -->
+        <div class="bg-amber-50/70 dark:bg-slate-800/60 border border-amber-100/60 dark:border-slate-700/50 rounded-2xl p-1.5 flex items-center justify-between gap-1">
+          <!-- 🌙 Theme Toggle Button -->
+          <button id="drawer-theme-toggle" class="flex-1 py-2 px-3 rounded-xl hover:bg-white dark:hover:bg-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1.5 transition">
+            <svg class="w-4 h-4 text-slate-700 dark:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+            <span id="drawer-theme-toggle-text">Theme</span>
+          </button>
+
+          <!-- ⇄ RTL Toggle Button -->
+          <button id="drawer-rtl-toggle" class="flex-1 py-2 px-3 rounded-xl hover:bg-white dark:hover:bg-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1.5 transition">
+            <svg class="w-4 h-4 text-slate-700 dark:text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 3 4 7l4 4"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="m16 21 4-4-4-4"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20 17H4"/>
+            </svg>
+            <span id="drawer-rtl-toggle-text">RTL / LTR</span>
+          </button>
+        </div>
+
+        <!-- Yellow Full-Width Log In Button -->
+        <button class="btn-login-open w-full py-3.5 px-4 rounded-full bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition cursor-pointer">
+          <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+          </svg>
+          <span>Log In</span>
+        </button>
+
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================= -->
+  <!-- 7 UNIQUE, NON-REPEATING PAGE SECTIONS                     -->
+  <!-- ========================================================= -->
+  <main class="flex-grow">
+    
+    <!-- SECTION 1: HERO SECTION (WITH UNIQUE LEGAL BACKGROUND IMAGE) -->
+    <section id="sec-hero" class="hero-bg text-white py-20 lg:py-28 relative shadow-xl">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div class="space-y-6">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> 
+              100% Legally Valid in All 50 States
+            </span>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif leading-tight">
+              Protect What Matters Most With a Legal Will.
+            </h1>
+            <p class="text-slate-300 text-lg sm:text-xl font-normal leading-relaxed">
+              Draft state-specific Last Wills, Power of Attorney, and Healthcare Directives online in less than 15 minutes. Simple guided questions, instant PDF downloads, and unlimited updates.
+            </p>
+            <div class="flex flex-wrap gap-4 pt-2">
+              <a href="#sec-dashboards" class="px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-base transition shadow-lg flex items-center gap-2">
+                <span>Start Drafting Free</span>
+                <span>→</span>
+              </a>
+              <a href="#sec-how-it-works" class="px-7 py-3.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 text-white font-semibold text-base transition">
+                How It Works
+              </a>
+            </div>
+            <div class="flex items-center gap-6 pt-4 text-xs text-slate-300">
+              <span class="flex items-center gap-1.5">🔒 Bank-Grade 256-bit SSL</span>
+              <span class="flex items-center gap-1.5">📜 Reviewed by Estate Attorneys</span>
+            </div>
+          </div>
+          <!-- Hero Interactive Widget -->
+          <div class="bg-slate-900/80 backdrop-blur-xl border border-slate-700 rounded-2xl p-6 sm:p-8 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-4 mb-6">
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                <span class="text-xs font-mono text-slate-400 ml-2">Last Will Generator Preview</span>
+              </div>
+              <span class="text-xs text-amber-400 font-semibold">Step 1 of 4</span>
+            </div>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Testator Name</label>
+                <input type="text" value="Eleanor Vance" disabled class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Appointed Executor</label>
+                <input type="text" value="Thomas Vance" disabled class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200">
+              </div>
+              <a href="#sec-dashboards" class="block text-center w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm transition">
+                Open Full Builder →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: LEGAL DOCUMENTS CATALOG (UNIQUE GRID & ICONS) -->
+    <section id="sec-documents" class="py-20 px-4 max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-300">SECTION 2</span>
+        <h2 class="text-3xl sm:text-4xl font-bold font-serif text-slate-900 dark:text-white mt-3">Legal Documents Catalog</h2>
+        <p class="text-slate-600 dark:text-slate-400 mt-2">State-specific legal templates customized to your individual needs.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-600 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <h3 class="font-bold text-lg">Last Will & Testament</h3>
+          <p class="text-xs text-slate-500 mt-1 mb-4">Assign executors, appoint guardians, and divide estate property.</p>
+          <a href="#sec-dashboards" class="text-xs font-bold text-blue-600 dark:text-blue-400">Start Draft →</a>
+        </div>
+
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="font-bold text-lg">Power of Attorney</h3>
+          <p class="text-xs text-slate-500 mt-1 mb-4">Grant authority for financial, legal, and business affairs.</p>
+          <a href="#sec-dashboards" class="text-xs font-bold text-blue-600 dark:text-blue-400">Start Draft →</a>
+        </div>
+
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <h3 class="font-bold text-lg">Living Will & Healthcare Proxy</h3>
+          <p class="text-xs text-slate-500 mt-1 mb-4">Outline medical care instructions & appoint healthcare proxy.</p>
+          <a href="#sec-dashboards" class="text-xs font-bold text-blue-600 dark:text-blue-400">Start Draft →</a>
+        </div>
+
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          </div>
+          <h3 class="font-bold text-lg">Revocable Living Trust</h3>
+          <p class="text-xs text-slate-500 mt-1 mb-4">Avoid probate court and transfer real estate smoothly.</p>
+          <a href="#sec-dashboards" class="text-xs font-bold text-blue-600 dark:text-blue-400">Start Draft →</a>
+        </div>
+
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </div>
+          <h3 class="font-bold text-lg">General Affidavit</h3>
+          <p class="text-xs text-slate-500 mt-1 mb-4">Sworn written statement of facts for legal proceedings.</p>
+          <a href="#sec-dashboards" class="text-xs font-bold text-blue-600 dark:text-blue-400">Start Draft →</a>
+        </div>
+
+        <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-pink-100 dark:bg-pink-950 text-pink-600 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+          </div>
+          <h3 class="font-bold text-lg">Bill of Sale</h3>
+          <p class="text-xs text-slate-500 mt-1 mb-4">Document ownership transfer of personal assets.</p>
+          <a href="#sec-dashboards" class="text-xs font-bold text-blue-600 dark:text-blue-400">Start Draft →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: HOW IT WORKS (UNIQUE STEP PROCESS WITH UNIQUE CARD IMAGE) -->
+    <section id="sec-how-it-works" class="py-20 px-4 bg-slate-100 dark:bg-slate-900/60 border-y border-slate-200 dark:border-slate-800">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300">SECTION 3</span>
+          <h2 class="text-3xl sm:text-4xl font-bold font-serif text-slate-900 dark:text-white mt-3">How JurisDraft Works</h2>
+          <p class="text-slate-600 dark:text-slate-400 mt-2">Three straightforward steps to legally binding documents.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8 items-stretch">
+          <div class="p-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg mb-6">1</div>
+              <h3 class="text-xl font-bold mb-3">Answer Guided Questions</h3>
+              <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Fill out straightforward form fields about your assets, guardians, and appointed representatives.</p>
+            </div>
+            <img src="images/index_step1.jpg" alt="Process Step 1" class="w-full h-40 object-cover rounded-xl mt-6">
+          </div>
+
+          <div class="p-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg mb-6">2</div>
+              <h3 class="text-xl font-bold mb-3">Save Progress & Review</h3>
+              <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Draft progress auto-saves to your local storage account so you can return anytime.</p>
+            </div>
+            <img src="images/index_step2.jpg" alt="Process Step 2" class="w-full h-40 object-cover rounded-xl mt-6">
+          </div>
+
+          <div class="p-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg mb-6">3</div>
+              <h3 class="text-xl font-bold mb-3">Download PDF & Sign</h3>
+              <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Export binding PDF legal documents complete with witness & notary signing guides.</p>
+            </div>
+            <img src="images/index_step3.jpg" alt="Process Step 3" class="w-full h-40 object-cover rounded-xl mt-6">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: TRANSPARENT PRICING PLANS (UNIQUE TIERS) -->
+    <section id="sec-pricing" class="py-20 px-4 max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-300">SECTION 4</span>
+        <h2 class="text-3xl sm:text-4xl font-bold font-serif text-slate-900 dark:text-white mt-3">Transparent Pricing</h2>
+        <p class="text-slate-600 dark:text-slate-400 mt-2">No monthly subscriptions or hidden legal fees. Pay once, own forever.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div class="p-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+          <div>
+            <h3 class="font-bold text-lg">Free Starter</h3>
+            <div class="text-4xl font-bold font-serif my-4">$0</div>
+            <p class="text-xs text-slate-500 mb-6">Draft & save progress online.</p>
+            <ul class="space-y-3 text-xs text-slate-600 dark:text-slate-400">
+              <li class="flex items-center gap-2">✓ Basic Will Questionnaire</li>
+              <li class="flex items-center gap-2">✓ Draft Auto-Save</li>
+              <li class="flex items-center gap-2 opacity-50">✗ PDF Export</li>
+            </ul>
+          </div>
+          <a href="#sec-dashboards" class="w-full py-3 mt-8 text-center bg-blue-900 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition shadow-md">
+            Get Started Free
+          </a>
+        </div>
+
+        <div class="p-8 bg-blue-900 text-white rounded-2xl border-2 border-amber-400 shadow-xl flex flex-col justify-between relative transform scale-105">
+          <span class="absolute -top-3 right-6 px-3 py-1 bg-amber-400 text-slate-950 font-extrabold text-xs rounded-full">POPULAR</span>
+          <div>
+            <h3 class="font-bold text-lg">Standard Will</h3>
+            <div class="text-4xl font-bold font-serif my-4">$39</div>
+            <p class="text-xs text-blue-200 mb-6">State-specific Will & PDF export.</p>
+            <ul class="space-y-3 text-xs text-blue-100">
+              <li class="flex items-center gap-2">✓ State-Compliant Last Will</li>
+              <li class="flex items-center gap-2">✓ Unlimited Updates for 1 Year</li>
+              <li class="flex items-center gap-2">✓ Instant High-Res PDF Download</li>
+            </ul>
+          </div>
+          <a href="#sec-dashboards" class="w-full py-3 mt-8 text-center bg-amber-400 hover:bg-amber-500 text-slate-950 font-bold text-xs rounded-xl transition shadow-md">
+            Select Standard Will
+          </a>
+        </div>
+
+        <div class="p-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+          <div>
+            <h3 class="font-bold text-lg">Estate Package</h3>
+            <div class="text-4xl font-bold font-serif my-4">$89</div>
+            <p class="text-xs text-slate-500 mb-6">Wills, Power of Attorney & Living Will.</p>
+            <ul class="space-y-3 text-xs text-slate-600 dark:text-slate-400">
+              <li class="flex items-center gap-2">✓ Everything in Standard Will</li>
+              <li class="flex items-center gap-2">✓ Durable Power of Attorney</li>
+              <li class="flex items-center gap-2">✓ Living Will & Healthcare Directive</li>
+            </ul>
+          </div>
+          <a href="#sec-dashboards" class="w-full py-3 mt-8 text-center bg-blue-900 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition shadow-md">
+            Select Estate Package
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: SECURITY & PRIVACY (UNIQUE IMAGE & ENCRYPTION SPECS) -->
+    <section id="sec-security" class="py-20 px-4 bg-slate-900 text-white relative">
+      <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+        <div class="space-y-6">
+          <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">SECTION 5</span>
+          <h2 class="text-3xl sm:text-4xl font-bold font-serif leading-tight">Bank-Grade 256-Bit SSL Security & Privacy</h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Your private legal documents are protected with military-grade encryption. We strictly follow zero-data-selling policies and state law standards.
+          </p>
+          <div class="grid grid-cols-2 gap-4 pt-2">
+            <div class="p-4 bg-slate-950/80 border border-slate-800 rounded-xl">
+              <div class="font-bold text-amber-400 text-sm mb-1">🔐 AES-256 Bit</div>
+              <p class="text-xs text-slate-400">End-to-end data encryption in transit & rest.</p>
+            </div>
+            <div class="p-4 bg-slate-950/80 border border-slate-800 rounded-xl">
+              <div class="font-bold text-emerald-400 text-sm mb-1">🛡️ Attorney Verified</div>
+              <p class="text-xs text-slate-400">Regularly audited for probate compliance.</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <img src="images/index_security.jpg" alt="Security Encryption" class="w-full h-80 object-cover rounded-2xl shadow-2xl border border-slate-800">
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: DASHBOARD PORTALS (USER WIZARD & ADMIN MANAGER) -->
+    <section id="sec-dashboards" class="py-20 px-4 max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-300">SECTION 6</span>
+        <h2 class="text-3xl sm:text-4xl font-bold font-serif text-slate-900 dark:text-white mt-3">User & Admin Dashboards</h2>
+        <p class="text-slate-600 dark:text-slate-400 mt-2">Draft legal documents step-by-step or manage platform templates.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Live User Drafting Wizard -->
+        <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-200 dark:border-slate-800">
+            <h3 class="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+              <span>👤</span> User Document Drafting Wizard
+            </h3>
+            <button id="wizard-save-btn" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-semibold text-xs rounded-lg transition">
+              💾 Save Draft
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Full Legal Name (Testator)</label>
+              <input id="field-testator-name" type="text" placeholder="John Alexander Doe" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm">
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Appointed Executor</label>
+                <input id="field-executor-name" type="text" placeholder="Jane Smith" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Primary Beneficiary</label>
+                <input id="field-beneficiary-name" type="text" placeholder="Alice Doe" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm">
+              </div>
+            </div>
+            <button id="wizard-generate-btn" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg transition mt-4">
+              Generate Final PDF Legal Will 📄
+            </button>
+          </div>
+        </div>
+
+        <!-- Account Drafts & Admin Template Manager Sidebar -->
+        <div class="space-y-6">
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+            <h3 class="font-bold text-sm mb-4">📁 Saved Account Drafts</h3>
+            <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-xs flex justify-between items-center">
+              <div>
+                <div class="font-bold text-slate-900 dark:text-white">Last Will & Testament</div>
+                <div class="text-[10px] text-slate-500">Draft Progress Saved</div>
+              </div>
+              <span class="px-2 py-0.5 bg-amber-100 text-amber-900 dark:bg-amber-900/40 dark:text-amber-300 rounded font-semibold text-[10px]">Saved</span>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+            <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
+              <span>🛡️</span> Admin Template Registry
+            </h3>
+            <div class="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg text-xs flex justify-between items-center">
+              <span>Standard Last Will (2026 Statute)</span>
+              <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full font-bold text-[10px]">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: LEGAL SUPPORT CONTACT (UNIQUE IMAGE & CONTACT FORM) -->
+    <section id="sec-contact" class="py-20 px-4 bg-slate-100 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-800">
+      <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="px-3.5 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-900 dark:bg-indigo-950 dark:text-indigo-300">SECTION 7</span>
+          <h2 class="text-3xl sm:text-4xl font-bold font-serif text-slate-900 dark:text-white mt-3">Contact Legal Support</h2>
+          <p class="text-slate-600 dark:text-slate-400 mt-2 mb-6">Have questions about drafting your will or navigating legal templates?</p>
+          <img src="images/index_support.jpg" alt="Support Contact" class="w-full h-64 object-cover rounded-2xl shadow-md border border-slate-200 dark:border-slate-800">
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <form id="contact-form" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Your Name</label>
+              <input type="text" required placeholder="John Doe" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Email Address</label>
+              <input type="email" required placeholder="john@example.com" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Message</label>
+              <textarea rows="3" required placeholder="How can our legal support team assist you?" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm"></textarea>
+            </div>
+            <button type="submit" class="w-full py-3 bg-blue-900 dark:bg-blue-600 text-white font-bold text-xs rounded-xl shadow-md transition">
+              Send Message to Legal Support ✉️
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================= -->
+  <!-- FOOTER SECTION (Downside with 4 Social & Action Icons)    -->
+  <!-- ========================================================= -->
+  <footer class="bg-slate-900 text-white border-t border-slate-800 pt-16 pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+        
+        <!-- Column 1: Brand, Description & 4 DOWNSIDE ICONS -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-blue-600 text-amber-400 flex items-center justify-center font-bold text-lg shadow-md">
+              <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18"/>
+              </svg>
+            </div>
+            <span class="text-2xl font-bold font-serif tracking-tight">JurisDraft</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+            Self-service legal document preparation made simple, affordable, and accessible. Draft wills, power of attorney, and healthcare directives online with ease.
+          </p>
+
+          <!-- 4 DOWNSIDE ICONS ROW BELOW DESCRIPTION -->
+          <div class="flex items-center gap-3 pt-2">
+            <a href="#" title="Twitter / X" class="w-9 h-9 rounded-xl bg-slate-800/80 hover:bg-blue-600 border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition shadow-sm">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" title="LinkedIn" class="w-9 h-9 rounded-xl bg-slate-800/80 hover:bg-blue-600 border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition shadow-sm">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.7a1.63 1.63 0 1 0 0 3.26 1.63 1.63 0 0 0 0-3.26z"/></svg>
+            </a>
+            <a href="#sec-security" title="Bank-Grade Security" class="w-9 h-9 rounded-xl bg-slate-800/80 hover:bg-emerald-600 border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition shadow-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4"/></svg>
+            </a>
+            <a href="#sec-contact" title="24/7 Legal Support" class="w-9 h-9 rounded-xl bg-slate-800/80 hover:bg-amber-600 border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition shadow-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Column 2: Navigation Links -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-sm tracking-wider uppercase text-slate-300">Pages</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="index.html" class="hover:text-amber-400 transition">🏠 Home 1 Page</a></li>
+            <li><a href="home2.html" class="hover:text-amber-400 transition">🏡 Home 2 Page</a></li>
+            <li><a href="#sec-documents" class="hover:text-amber-400 transition">Legal Documents Library</a></li>
+            <li><a href="#sec-how-it-works" class="hover:text-amber-400 transition">How It Works</a></li>
+            <li><a href="#sec-pricing" class="hover:text-amber-400 transition">Pricing Plans</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Popular Legal Documents -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-sm tracking-wider uppercase text-slate-300">Popular Documents</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="#sec-dashboards" class="hover:text-amber-400 transition">Last Will & Testament</a></li>
+            <li><a href="#sec-dashboards" class="hover:text-amber-400 transition">Durable Power of Attorney</a></li>
+            <li><a href="#sec-dashboards" class="hover:text-amber-400 transition">Living Will & Directive</a></li>
+            <li><a href="#sec-dashboards" class="hover:text-amber-400 transition">Revocable Living Trust</a></li>
+            <li><a href="#sec-dashboards" class="hover:text-amber-400 transition">General Affidavits</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Portals & Trust -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-sm tracking-wider uppercase text-slate-300">Portals & Trust</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li>
+              <a href="#sec-dashboards" class="hover:text-amber-400 transition flex items-center gap-2">
+                <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span>User Dashboard</span>
+              </a>
+            </li>
+            
+            <li>
+              <a href="#sec-dashboards" class="hover:text-amber-400 transition flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4"/>
+                </svg>
+                <span>Admin Dashboard</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="#sec-security" class="hover:text-amber-400 transition flex items-center gap-2">
+                <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <span>Security & Privacy</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="#sec-contact" class="hover:text-amber-400 transition flex items-center gap-2">
+                <svg class="w-4 h-4 text-indigo-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/>
+                </svg>
+                <span>Legal Support Contact</span>
+              </a>
+            </li>
+          </ul>
+
+          <div class="pt-3 flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span>256-Bit SSL Encrypted</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom Bar -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <div>
+          © 2026 JurisDraft Online Will & Legal Document Preparation Service. All rights reserved.
+        </div>
+
+        <div class="flex items-center space-x-6">
+          <a href="#sec-security" class="hover:text-slate-300 transition">Privacy Policy</a>
+          <a href="#sec-security" class="hover:text-slate-300 transition">Terms of Service</a>
+          <a href="#sec-security" class="hover:text-slate-300 transition">Security Badges</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODALS -->
+  <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm hidden">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-md p-8 rounded-2xl shadow-2xl relative">
+      <button id="login-modal-close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg">✕</button>
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 rounded-xl bg-blue-900 text-amber-400 flex items-center justify-center text-2xl mx-auto mb-3">
+          <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="text-2xl font-bold font-serif">Sign In to JurisDraft</h3>
+      </div>
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Email Address</label>
+          <input id="login-email" type="email" required placeholder="user@example.com" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-2 text-sm">
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl bg-blue-900 dark:bg-blue-600 text-white font-bold text-sm">Sign In →</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="pdf-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm hidden p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-2xl p-6 rounded-2xl shadow-2xl relative">
+      <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
+        <h3 class="text-lg font-bold">📄 Legal PDF Preview</h3>
+        <button onclick="closePdfModal()" class="text-slate-400 hover:text-slate-600">✕</button>
+      </div>
+      <div id="pdf-document-body" class="mb-6"></div>
+      <div class="flex justify-end gap-3">
+        <button onclick="closePdfModal()" class="px-4 py-2 border rounded-lg text-xs font-semibold">Close</button>
+        <button onclick="window.print()" class="px-5 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold">Print PDF 🖨️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMBEDDED JAVASCRIPT -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      initDirection();
+      initModals();
+      initUserDashboard();
+      initContactForm();
+    });
+
+    function toggleMobileMenu() {
+      const panel = document.getElementById('mobile-menu-panel');
+      const backdrop = document.getElementById('mobile-menu-backdrop');
+      const hamburgerIcon = document.getElementById('hamburger-icon');
+      const closeIcon = document.getElementById('close-icon');
+
+      if (panel) {
+        const isClosed = panel.classList.contains('translate-x-[calc(100%+30px)]') || panel.classList.contains('translate-x-full');
+        if (isClosed) {
+          panel.classList.remove('translate-x-[calc(100%+30px)]', 'translate-x-full');
+          panel.classList.add('translate-x-0');
+          if (backdrop) {
+            backdrop.classList.remove('pointer-events-none', 'opacity-0');
+            backdrop.classList.add('opacity-100');
+          }
+          if (hamburgerIcon) hamburgerIcon.classList.add('hidden');
+          if (closeIcon) closeIcon.classList.remove('hidden');
+          document.body.classList.add('overflow-hidden');
+        } else {
+          panel.classList.remove('translate-x-0');
+          panel.classList.add('translate-x-[calc(100%+30px)]');
+          if (backdrop) {
+            backdrop.classList.remove('opacity-100');
+            backdrop.classList.add('opacity-0', 'pointer-events-none');
+          }
+          if (hamburgerIcon) hamburgerIcon.classList.remove('hidden');
+          if (closeIcon) closeIcon.classList.add('hidden');
+          document.body.classList.remove('overflow-hidden');
+        }
+      }
+    }
+
+    function toggleDrawerSubmenu(id) {
+      const submenu = document.getElementById(id);
+      const arrowId = id.replace('-submenu', '-arrow');
+      const arrow = document.getElementById(arrowId);
+      if (submenu) {
+        submenu.classList.toggle('hidden');
+        if (arrow) {
+          arrow.classList.toggle('rotate-180');
+        }
+      }
+    }
+
+    function initTheme() {
+      const darkToggle = document.getElementById('theme-toggle');
+      const mobileDarkToggle = document.getElementById('mobile-theme-toggle');
+      const drawerDarkToggle = document.getElementById('drawer-theme-toggle');
+      const darkText = document.getElementById('theme-toggle-text');
+      const drawerDarkText = document.getElementById('drawer-theme-toggle-text');
+      const savedTheme = localStorage.getItem('legal_doc_theme');
+
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+        if (darkText) darkText.textContent = 'Light Mode';
+        if (drawerDarkText) drawerDarkText.textContent = 'Theme ☀️';
+      }
+
+      function toggleTheme() {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('legal_doc_theme', isDark ? 'dark' : 'light');
+        if (darkText) darkText.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+        if (drawerDarkText) drawerDarkText.textContent = isDark ? 'Theme ☀️' : 'Theme 🌙';
+        showToast(isDark ? 'Dark Mode Enabled 🌙' : 'Light Mode Enabled ☀️');
+      }
+
+      if (darkToggle) darkToggle.addEventListener('click', toggleTheme);
+      if (mobileDarkToggle) mobileDarkToggle.addEventListener('click', toggleTheme);
+      if (drawerDarkToggle) drawerDarkToggle.addEventListener('click', toggleTheme);
+    }
+
+    function initDirection() {
+      const rtlToggle = document.getElementById('rtl-toggle');
+      const mobileRtlToggle = document.getElementById('mobile-rtl-toggle');
+      const drawerRtlToggle = document.getElementById('drawer-rtl-toggle');
+      const rtlText = document.getElementById('rtl-toggle-text');
+      const drawerRtlText = document.getElementById('drawer-rtl-toggle-text');
+      const savedDir = localStorage.getItem('legal_doc_dir') || 'ltr';
+
+      document.documentElement.setAttribute('dir', savedDir);
+      if (rtlText) rtlText.textContent = savedDir === 'rtl' ? 'LTR View' : 'RTL View';
+      if (drawerRtlText) drawerRtlText.textContent = savedDir === 'rtl' ? 'LTR / RTL' : 'RTL / LTR';
+
+      function toggleDirection() {
+        const currentDir = document.documentElement.getAttribute('dir');
+        const newDir = currentDir === 'rtl' ? 'ltr' : 'rtl';
+        document.documentElement.setAttribute('dir', newDir);
+        localStorage.setItem('legal_doc_dir', newDir);
+        if (rtlText) rtlText.textContent = newDir === 'rtl' ? 'LTR View' : 'RTL View';
+        if (drawerRtlText) drawerRtlText.textContent = newDir === 'rtl' ? 'LTR / RTL' : 'RTL / LTR';
+        showToast(`Layout switched to ${newDir.toUpperCase()} mode ↔️`);
+      }
+
+      if (rtlToggle) rtlToggle.addEventListener('click', toggleDirection);
+      if (mobileRtlToggle) mobileRtlToggle.addEventListener('click', toggleDirection);
+      if (drawerRtlToggle) drawerRtlToggle.addEventListener('click', toggleDirection);
+    }
+
+    function initModals() {
+      const loginBtns = document.querySelectorAll('.btn-login-open');
+      const loginModal = document.getElementById('login-modal');
+      const closeBtn = document.getElementById('login-modal-close');
+      const loginForm = document.getElementById('login-form');
+
+      loginBtns.forEach(btn => btn.addEventListener('click', (e) => { window.location.href = 'login.html'; }));
+      if (closeBtn) closeBtn.addEventListener('click', () => loginModal?.classList.add('hidden'));
+      if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          loginModal?.classList.add('hidden');
+          showToast('Signed in successfully! 👤');
+          document.querySelector('#sec-dashboards')?.scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+    }
+
+    function initUserDashboard() {
+      const saveBtn = document.getElementById('wizard-save-btn');
+      const generateBtn = document.getElementById('wizard-generate-btn');
+
+      if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+          showToast('Draft progress saved! 💾');
+        });
+      }
+
+      if (generateBtn) {
+        generateBtn.addEventListener('click', () => {
+          const name = document.getElementById('field-testator-name')?.value || 'John Doe';
+          const executor = document.getElementById('field-executor-name')?.value || 'Jane Smith';
+          const beneficiary = document.getElementById('field-beneficiary-name')?.value || 'Alice Doe';
+          
+          document.getElementById('pdf-document-body').innerHTML = `
+            <div id="printable-document" class="p-6 bg-white text-gray-900 font-serif border rounded">
+              <h2 class="text-2xl font-bold text-center border-b pb-4 mb-4">LAST WILL AND TESTAMENT</h2>
+              <p class="mb-3">I, <strong>${name}</strong>, declare this to be my Last Will and Testament.</p>
+              <p class="mb-3">I appoint <strong>${executor}</strong> as the Executor of this Will.</p>
+              <p class="mb-3">I bequeath my residual estate to <strong>${beneficiary}</strong>.</p>
+            </div>
+          `;
+          document.getElementById('pdf-modal')?.classList.remove('hidden');
+        });
+      }
+    }
+
+    function initContactForm() {
+      const form = document.getElementById('contact-form');
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          form.reset();
+          showToast('Message sent to legal support! ✉️');
+        });
+      }
+    }
+
+    function showToast(msg) {
+      let toast = document.getElementById('toast-notification');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast-notification';
+        toast.className = 'fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl transition-all duration-300 font-medium text-sm';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+    }
+
+    function closePdfModal() {
+      document.getElementById('pdf-modal')?.classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
