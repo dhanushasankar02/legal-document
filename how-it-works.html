@@ -547,21 +547,21 @@
 
             <!-- SIMULATOR STEP SWITCHER BUTTONS -->
             <div class="space-y-3" id="simStepList">
-              <button onclick="switchSimStep(1)" id="simTab1" class="w-full text-left p-4 rounded-xl border border-amber-500 bg-amber-50 dark:bg-amber-950/40 text-slate-900 dark:text-white font-semibold text-xs flex items-center justify-between transition-all">
-                <span>Phase 1: Personal &amp; Family Information</span>
-                <span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 text-[10px] font-bold">Active</span>
+              <button onclick="switchSimStep(1)" id="simTab1" class="w-full text-left p-4 rounded-xl border border-amber-500 bg-amber-50 dark:bg-amber-950/40 text-slate-900 dark:text-white font-semibold text-xs flex items-center justify-between gap-3 transition-all">
+                <span class="min-w-0">Phase 1: Personal &amp; Family Information</span>
+                <span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 text-[10px] font-bold whitespace-nowrap flex-shrink-0">Active</span>
               </button>
-              <button onclick="switchSimStep(2)" id="simTab2" class="w-full text-left p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-semibold text-xs flex items-center justify-between transition-all">
-                <span>Phase 2: Beneficiary Asset Allocation</span>
-                <span class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px]">Step 2</span>
+              <button onclick="switchSimStep(2)" id="simTab2" class="w-full text-left p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-semibold text-xs flex items-center justify-between gap-3 transition-all">
+                <span class="min-w-0">Phase 2: Beneficiary Asset Allocation</span>
+                <span class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] whitespace-nowrap flex-shrink-0">Step 2</span>
               </button>
-              <button onclick="switchSimStep(3)" id="simTab3" class="w-full text-left p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-semibold text-xs flex items-center justify-between transition-all">
-                <span>Phase 3: Executor &amp; Legal Guardian Selection</span>
-                <span class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px]">Step 3</span>
+              <button onclick="switchSimStep(3)" id="simTab3" class="w-full text-left p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-semibold text-xs flex items-center justify-between gap-3 transition-all">
+                <span class="min-w-0">Phase 3: Executor &amp; Legal Guardian Selection</span>
+                <span class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] whitespace-nowrap flex-shrink-0">Step 3</span>
               </button>
-              <button onclick="switchSimStep(4)" id="simTab4" class="w-full text-left p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-semibold text-xs flex items-center justify-between transition-all">
-                <span>Phase 4: Instant PDF Export &amp; Signature Guide</span>
-                <span class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px]">Step 4</span>
+              <button onclick="switchSimStep(4)" id="simTab4" class="w-full text-left p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-semibold text-xs flex items-center justify-between gap-3 transition-all">
+                <span class="min-w-0">Phase 4: Instant PDF Export &amp; Signature Guide</span>
+                <span class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] whitespace-nowrap flex-shrink-0">Step 4</span>
               </button>
             </div>
           </div>
@@ -1119,10 +1119,19 @@
 
       for(let i=1; i<=4; i++) {
         const tab = document.getElementById(`simTab${i}`);
+        const badge = tab ? tab.querySelector('span:last-child') : null;
         if (i === step) {
-          tab.className = "w-full text-left p-4 rounded-xl border border-amber-500 bg-amber-50 dark:bg-amber-950/40 text-slate-900 dark:text-white font-semibold text-xs flex items-center justify-between transition-all";
+          tab.className = "w-full text-left p-4 rounded-xl border border-amber-500 bg-amber-50 dark:bg-amber-950/40 text-slate-900 dark:text-white font-semibold text-xs flex items-center justify-between gap-3 transition-all";
+          if (badge) {
+            badge.textContent = "Active";
+            badge.className = "px-2 py-0.5 rounded bg-amber-500 text-slate-950 text-[10px] font-bold whitespace-nowrap flex-shrink-0";
+          }
         } else {
-          tab.className = "w-full text-left p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-semibold text-xs flex items-center justify-between transition-all";
+          tab.className = "w-full text-left p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-semibold text-xs flex items-center justify-between gap-3 transition-all";
+          if (badge) {
+            badge.textContent = `Step ${i}`;
+            badge.className = "px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] whitespace-nowrap flex-shrink-0";
+          }
         }
       }
     }
