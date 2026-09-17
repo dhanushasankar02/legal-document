@@ -56,7 +56,6 @@
 
     p, h1, h2, h3, h4, h5, h6, span, a, label, button, input, textarea, select {
       overflow-wrap: break-word;
-      word-break: break-word;
     }
 
     body {
@@ -579,30 +578,30 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           
-          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 font-bold flex items-center justify-center text-xs">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 font-bold flex items-center justify-center text-xs shrink-0">
                 RJ
               </div>
-              <div>
-                <p class="font-bold text-xs text-slate-900 dark:text-white">Robert Jenkins (Spouse)</p>
-                <p class="text-[11px] text-slate-500">Executive Access &bull; Key #K-9021</p>
+              <div class="min-w-0">
+                <p class="font-bold text-xs text-slate-900 dark:text-white truncate">Robert Jenkins (Spouse)</p>
+                <p class="text-[11px] text-slate-500 truncate">Executive Access &bull; Key #K-9021</p>
               </div>
             </div>
-            <span class="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px]">Active</span>
+            <span class="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] whitespace-nowrap shrink-0">Active</span>
           </div>
 
-          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-300 font-bold flex items-center justify-center text-xs">
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-300 font-bold flex items-center justify-center text-xs shrink-0">
                 MV
               </div>
-              <div>
-                <p class="font-bold text-xs text-slate-900 dark:text-white">Michael Vance, Esq. (Legal Counsel)</p>
-                <p class="text-[11px] text-slate-500">Attorney Review Key &bull; Key #K-4410</p>
+              <div class="min-w-0">
+                <p class="font-bold text-xs text-slate-900 dark:text-white truncate">Michael Vance, Esq. (Legal Counsel)</p>
+                <p class="text-[11px] text-slate-500 truncate">Attorney Review Key &bull; Key #K-4410</p>
               </div>
             </div>
-            <span class="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px]">Active</span>
+            <span class="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] whitespace-nowrap shrink-0">Active</span>
           </div>
 
         </div>
@@ -617,39 +616,39 @@
       <!-- ========================================================= -->
       <!-- SECTION 6: BILLING & TOKENS (#sec-user-billing)           -->
       <!-- ========================================================= -->
-      <section id="sec-user-billing" class="dashboard-page hidden grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section id="sec-user-billing" class="dashboard-page hidden grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
         
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between h-full min-w-0">
           <div>
-            <span class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-bold text-[10px] uppercase">Active Plan</span>
-            <h3 class="font-serif text-xl font-bold text-slate-900 dark:text-white mt-3">Pro Estate &amp; Business</h3>
-            <p class="text-2xl font-bold text-blue-900 dark:text-blue-400 mt-2">$39 <span class="text-xs text-slate-500 font-normal">/ month</span></p>
-            <p class="text-xs text-slate-500 mt-2">Renews Oct 1, 2026</p>
+            <span class="inline-block px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-bold text-[10px] uppercase shrink-0">Active Plan</span>
+            <h3 class="font-serif text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-3 leading-snug">Pro Estate &amp; Business</h3>
+            <p class="text-xl sm:text-2xl font-bold text-blue-900 dark:text-blue-400 mt-2">$39 <span class="text-xs text-slate-500 font-normal">/ month</span></p>
+            <p class="text-xs text-slate-500 mt-1">Renews Oct 1, 2026</p>
           </div>
-          <button onclick="alert('Managing plan billing...')" class="mt-6 w-full py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-900 dark:text-white font-bold text-xs rounded-xl transition">
+          <button onclick="alert('Managing plan billing...')" class="mt-6 w-full py-2.5 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-900 dark:text-white font-bold text-xs rounded-xl transition text-center flex items-center justify-center">
             Manage Subscription
           </button>
         </div>
 
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between h-full min-w-0">
           <div>
-            <span class="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 font-bold text-[10px] uppercase">Notary Balance</span>
-            <h3 class="font-serif text-xl font-bold text-slate-900 dark:text-white mt-3">Online Notary Tokens</h3>
-            <p class="text-2xl font-bold text-purple-600 dark:text-purple-400 mt-2">2 Tokens <span class="text-xs text-slate-500 font-normal">Available</span></p>
-            <p class="text-xs text-slate-500 mt-2">Remote Online Notarization (RON)</p>
+            <span class="inline-block px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 font-bold text-[10px] uppercase shrink-0">Notary Balance</span>
+            <h3 class="font-serif text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-3 leading-snug">Online Notary Tokens</h3>
+            <p class="text-xl sm:text-2xl font-bold text-purple-600 dark:text-purple-400 mt-2">2 Tokens <span class="text-xs text-slate-500 font-normal">Available</span></p>
+            <p class="text-xs text-slate-500 mt-1">Remote Online Notarization (RON)</p>
           </div>
-          <button onclick="alert('Purchased 1 extra notary token ($25)!')" class="mt-6 w-full py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl transition">
+          <button onclick="alert('Purchased 1 extra notary token ($25)!')" class="mt-6 w-full py-2.5 px-3 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl transition text-center flex items-center justify-center">
             + Purchase Notary Token ($25)
           </button>
         </div>
 
-        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between h-full min-w-0">
           <div>
-            <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] uppercase">Payment Card</span>
-            <h3 class="font-serif text-xl font-bold text-slate-900 dark:text-white mt-3">Visa &bull;&bull;&bull;&bull; 4242</h3>
+            <span class="inline-block px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] uppercase shrink-0">Payment Card</span>
+            <h3 class="font-serif text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-3 leading-snug">Visa &bull;&bull;&bull;&bull; 4242</h3>
             <p class="text-xs text-slate-500 mt-2">Expires 09/2028 &bull; Auto-Pay Active</p>
           </div>
-          <button onclick="alert('Downloading PDF receipts...')" class="mt-6 w-full py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-900 dark:text-white font-bold text-xs rounded-xl transition">
+          <button onclick="alert('Downloading PDF receipts...')" class="mt-6 w-full py-2.5 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-900 dark:text-white font-bold text-xs rounded-xl transition text-center flex items-center justify-center">
             Download Invoices (PDF)
           </button>
         </div>
